@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <!--设置为开发模式, LOG日志会多一些-->
+    <constant name="struts.devMode" value="true"/>
+    <!--让Spring管理Action对象的创建-->
+    <!--当然这个配置可以不写, 因为在struts2-spring-plugin里面已经有了-->
+    <constant name="struts.objectFactory" value="spring"/>
+    <package name="HRD" extends="json-default">
+        <action name="login"
+                class="staffAction"
+                method="login">
+
+            <result name="success">/pages/frame.jsp</result>
+            <result name="input">/pages/login.jsp</result>
+
+        </action>
+    </package>
+</struts>
