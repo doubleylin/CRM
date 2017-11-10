@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.lanou3g.crm.staff.domain">
+    <class name="Post" table="crm_post">
+        <id name="postId" column="postId">
+            <generator class="uuid"/>
+        </id>
+        <property name="postName"/>
+        <set name="staffs"
+             cascade="all"
+             lazy="false"
+             inverse="false" >
+            <key column="postId"></key>
+            <one-to-many class="com.lanou3g.crm.staff.domain.Staff"/>
+        </set>
+
+        <many-to-one name="department"
+                     column="depId"
+                     class="com.lanou3g.crm.staff.domain.Department"
+                     not-null="true"
+                     cascade="all"
+                     lazy="false"/>
+
+
+
+
+
+    </class>
+</hibernate-mapping>
