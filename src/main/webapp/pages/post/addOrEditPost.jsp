@@ -34,7 +34,7 @@
   </tr>
 </table>
 
-<form action="${pageContext.request.contextPath}/pages/post/listPost.jsp" method="post">
+<form action="${pageContext.request.contextPath}/addPost.action" method="post">
 	<table width="88%" border="0" class="emp_table" style="width:80%;">
 	 <tr>
 	    <td>选择部门：</td>

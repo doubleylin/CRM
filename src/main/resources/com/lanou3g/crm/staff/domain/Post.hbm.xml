@@ -9,9 +9,10 @@
         </id>
         <property name="postName"/>
         <set name="staffs"
+             table="crm_staff"
              cascade="all"
              lazy="false"
-             inverse="false" >
+             inverse="true" >
             <key column="postId"></key>
             <one-to-many class="com.lanou3g.crm.staff.domain.Staff"/>
         </set>

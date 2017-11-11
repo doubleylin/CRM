@@ -1,8 +1,9 @@
 package com.lanou3g.crm.staff.dao.impl;
 
 import com.lanou3g.crm.base.impl.BaseAction;
-import com.lanou3g.crm.staff.dao.DepartmentDao;
+import com.lanou3g.crm.staff.dao.PostDao;
 import com.lanou3g.crm.staff.domain.Department;
+import com.lanou3g.crm.staff.domain.Post;
 import com.lanou3g.crm.utils.PageHibernateCallback;
 
 import java.util.HashMap;
@@ -30,33 +31,39 @@ import java.util.Map;
  * .                       '.:::::'                    ':'````..
  */
 
-public class DepartmentDaoImpl extends BaseAction<Department> implements DepartmentDao {
+public class PostDaoImpl extends BaseAction<Post> implements PostDao {
     @Override
-    public List<Department> findAllDepartment() {
-        String sql = "from Department";
-        return findAll(sql);
+    public List<Post> findAllPost() {
+        return findAll("from Post");
     }
 
     @Override
-    public void addDepartment(Department department) {
-        save(department);
+    public void addPost(Post post) {
+        save(post);
     }
 
     @Override
-    public void updateDepartment(Department department) {
-        update(department);
+    public void updatePost(Post post) {
+        update(post);
     }
 
     @Override
-    public Department findById(String depId) {
+    public List<Post> findPostByDepId(String depId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("id",depId);
-        return findSingle("from Department where depId=:id",map);
+        map.put("id", depId);
+        return find("from Post where depId=:id", map);
     }
 
     @Override
-    public int getTotalDept() {
-        String  sql = "select count(d) from Department d where 1=1";
+    public Post findPostByPostId(String postId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",postId);
+        return findSingle("from Post where postId=:id",map);
+    }
+
+    @Override
+    public int getTotalPost() {
+        String  sql = "select count(p) from Post p where 1=1";
 
         List<Long> find = (List<Long>) getHibernateTemplate().find(sql);
 
@@ -67,8 +74,8 @@ public class DepartmentDaoImpl extends BaseAction<Department> implements Departm
     }
 
     @Override
-    public List<Department> findGet(int startIndex, int pageSize) {
-        String sql = "from Department where 1=1 ";
-        return getHibernateTemplate().execute(new PageHibernateCallback<Department>(sql, startIndex, pageSize));
+    public List<Post> findPostByPage(int startIndex, int pageSize) {
+        String sql = "from Post where 1=1 ";
+        return getHibernateTemplate().execute(new PageHibernateCallback<Post>(sql, startIndex, pageSize));
     }
 }

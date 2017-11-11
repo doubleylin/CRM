@@ -28,10 +28,28 @@
           class="com.lanou3g.crm.staff.dao.impl.StaffDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+    <bean class="com.lanou3g.crm.staff.service.impl.StaffServiceImpl"
+          id="staffService">
+        <property name="staffDao" ref="staffDao"/>
+    </bean>
     <!--查询部门-->
     <bean id="deptDao"
-          class="com.lanou3g.crm.dept.dao.impl.DeptDaoImpl">
+          class="com.lanou3g.crm.staff.dao.impl.DepartmentDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean class="com.lanou3g.crm.staff.service.impl.DepartmentServiceImpl"
+            id="departmentService">
+        <property name="departmentDao" ref="deptDao"/>
+    </bean>
+
+    <!--查询职位-->
+    <bean id="postDao"
+          class="com.lanou3g.crm.staff.dao.impl.PostDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean class="com.lanou3g.crm.staff.service.impl.PostServiceImpl"
+          id="postService">
+        <property name="postDao" ref="postDao"/>
     </bean>
 
     <bean id="transactionManager"
@@ -50,7 +68,7 @@
         <!--声明切点-->
 
         <aop:pointcut id="staffPointCut"
-                      expression="execution(* com.lanou3g.crm.staff.dao.impl.*.*(..))"/>
+                      expression="execution(* com.lanou3g.crm.staff.service.impl.*.*(..))"/>
 
         <!--配置顾问-->
         <aop:advisor advice-ref="staffAdvisor"
@@ -75,7 +93,7 @@
         <!--声明切点-->
 
         <aop:pointcut id="deptPointCut"
-                      expression="execution(* com.lanou3g.crm.dept.dao.impl.*.*(..))"/>
+                      expression="execution(* com.lanou3g.crm.staff.service.impl.*.*(..))"/>
 
         <!--配置顾问-->
         <aop:advisor advice-ref="deptAdvisor"
@@ -83,4 +101,27 @@
 
     </aop:config>
 
+
+
+
+
+    <tx:advice id="postAdvisor"
+               transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置切面-->
+    <aop:config>
+        <!--声明切点-->
+
+        <aop:pointcut id="postPointCut"
+                      expression="execution(* com.lanou3g.crm.staff.service.impl.*.*(..))"/>
+
+        <!--配置顾问-->
+        <aop:advisor advice-ref="postAdvisor"
+                     pointcut-ref="postPointCut"/>
+
+    </aop:config>
 </beans>

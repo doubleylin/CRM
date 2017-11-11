@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 public interface StaffDao {
-    Staff login(Staff staff);
+    Staff login(String name,String password);
     Staff overLogin(String name,String password);
-    List<Staff> findAll(Staff staff);
+    List<Staff> findAll();
 }

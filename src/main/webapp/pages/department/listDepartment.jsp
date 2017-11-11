@@ -1,4 +1,5 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -45,7 +46,7 @@
         <td width="6%" align="center">部门名称</td>
         <td width="7%" align="center">编辑</td>
     </tr>
-    <s:iterator var="dept" value="dept">
+    <s:iterator var="dept" value="#pageBean.data">
         <tr class="tabtd1">
             <td align="center">${dept.depName}</td>
             <td width="7%" align="center">
@@ -62,12 +63,26 @@
 <table border="0" cellspacing="0" cellpadding="0" align="center">
     <tr>
         <td align="right">
-            <span>第1/3页</span>
+            <span>第<s:property value="#pageBean.pageNum"/>/<s:property value="#pageBean.totalPage"/>页</span>
             <span>
-        	<a href="#">[首页]</a>&nbsp;&nbsp;
-            <a href="#">[上一页]</a>&nbsp;&nbsp;
-            <a href="#">[下一页]</a>&nbsp;&nbsp;
-            <a href="#">[尾页]</a>
+        	<a href="findAllDeptByPage">[首页]</a>&nbsp;&nbsp;
+            <a href="findAllDeptByPage?pageNum=${pageBean.pageNum-1}">[上一页]</a>&nbsp;&nbsp;
+                <s:iterator begin="#pageBean.start" end="#pageBean.end" var="num">
+                    <s:if test="#num <= #pageBean.totalPage">
+                            <a href="findAllDeptByPage?pageNum=${num}">
+                            <s:property value="#num"/> </a>&nbsp;&nbsp;
+                    </s:if>
+                </s:iterator>
+            <a
+            <c:choose>
+
+                    <c:when test="${pageBean.pageNum >= pageBean.totalPage}">href="#"</c:when>
+
+                    <c:otherwise>href="findAllDeptByPage?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
+
+                </c:choose>
+            >[下一页]</a>&nbsp;&nbsp;
+            <a href="findAllDeptByPage?pageNum=${pageBean.totalPage}">[尾页]</a>
         </span>
         </td>
     </tr>

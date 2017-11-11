@@ -29,7 +29,7 @@
     </package>
     <package name="staff" extends="common">
         <action name="login"
-                class="staffAction"
+                class="com.lanou3g.crm.staff.web.action.StaffAction"
                 method="login">
 
             <result name="success">/pages/frame.jsp</result>
@@ -39,17 +39,41 @@
         </action>
     </package>
     <package name="dept" extends="common">
-        <default-class-ref
-                class="com.lanou3g.crm.dept.action.DeptAction"/>
-        <action name="findAll"
-                class="deptAction"
-                method="findAll">
+
+        <action name="findAllDeptByPage"
+                class="com.lanou3g.crm.staff.web.action.DepartmentAction"
+                method="findAllDeptByPage">
             <result name="success">/pages/department/listDepartment.jsp</result>
         </action>
-        <action name="save"
-                class="deptAction"
-                method="save">
-            <result name="success" type="chain">findAll</result>
+        <action name="findAllDept"
+                class="com.lanou3g.crm.staff.web.action.DepartmentAction"
+                method="findAllDept">
+            <result name="success" >/pages/department/listDepartment.jsp</result>
+        </action>
+        <action name="addDepartment"
+                class="com.lanou3g.crm.staff.web.action.DepartmentAction"
+                method="addDepartment">
+            <result name="success" type="chain">findAllDeptByPage</result>
+            <result name="input">/pages/department/addOrEditDepartment.jsp</result>
+        </action>
+    </package>
+    <package name="post" extends="common">
+        <action name="findAllPost"
+                class="com.lanou3g.crm.staff.web.action.PostAction"
+                method="findAllPost">
+            <result name="success" >/pages/post/listPost.jsp</result>
+        </action>
+        <action name="findPostByPage"
+                class="com.lanou3g.crm.staff.web.action.PostAction"
+                method="findPostByPage">
+            <result name="success">/pages/post/listPost.jsp</result>
+        </action>
+        <action name="addPost"
+                class="com.lanou3g.crm.staff.web.action.PostAction"
+                method="addPost">
+            <result name="success" type="chain">findPostByPage</result>
+            <result name="error">/pages/post/listPost.jsp</result>
+            <result name="input">/pages/post/addOrEditPost.jsp</result>
         </action>
     </package>
 </struts>

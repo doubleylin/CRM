@@ -36,11 +36,12 @@
             <img src="${pageContext.request.contextPath}/images/tright.gif"/></td>
     </tr>
 </table>
-<form action="save.action" method="post">
+<form action="addDepartment.action" method="post">
     <table width="88%" border="0" class="emp_table" style="width:80%;">
         <tr>
             <td>部门名称：</td>
-            <td><input type="text" name="depName"/></td>
+            <input type="hidden"name="depId" value="${param.depId}">
+            <td><input type="text" name="depName" value="${param.depName}"/></td>
         </tr>
     </table>
 </form>

@@ -1,6 +1,7 @@
-package com.lanou3g.crm.staff.service;
+package com.lanou3g.crm.staff.dao;
 
-import com.lanou3g.crm.staff.domain.Staff;
+
+import com.lanou3g.crm.staff.domain.Post;
 
 import java.util.List;
 
@@ -25,8 +26,20 @@ import java.util.List;
  * .                       '.:::::'                    ':'````..
  */
 
-public interface StaffService {
-    Staff login(String name,String password);
-    Staff overLogin(String name,String password);
-    List<Staff> findAll();
+public interface PostDao {
+
+    List<Post> findAllPost();
+
+    void addPost(Post post);
+
+    void updatePost(Post post);
+
+    List<Post> findPostByDepId(String depId);
+
+    Post findPostByPostId(String postId);
+
+    int getTotalPost();
+
+    List<Post> findPostByPage(int startIndex, int pageSize);
+
 }

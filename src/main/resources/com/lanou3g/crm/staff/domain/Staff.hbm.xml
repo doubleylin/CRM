@@ -17,6 +17,7 @@
                              lazy="false"
                              column="postId"
                              class="com.lanou3g.crm.staff.domain.Post"
+                             not-null="true"
                                 cascade="all"/>
 
         </class>

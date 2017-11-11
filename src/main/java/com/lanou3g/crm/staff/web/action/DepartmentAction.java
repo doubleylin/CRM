@@ -36,7 +36,7 @@ import java.util.List;
 @Scope("prototype")
 public class DepartmentAction extends ActionSupport implements ModelDriven<Department> {
     private Department department = new Department();
-
+    @Resource(name = "departmentService")
     private DepartmentService departmentService;
 
     private int pageNum;
@@ -50,29 +50,32 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
         if (department.getDepId().equals("")){
             departmentService.addDepartment(department);
         }else {
-            departmentService.updateDepattment(department);
+            departmentService.updateDepartment(department);
         }
         return SUCCESS;
     }
     public String findAllDeptByPage(){
-        if (pageNum==0){
-            pageNum=1;
+        if (pageNum == 0){
+            pageNum = 1;
         }
-        PageBean<Department> data = departmentService.findAllDepartmentP(department,pageNum,pageSize);
+        PageBean<Department> data =
+                departmentService.findAllDeptByPage
+                (department,pageNum,pageSize);
         ActionContext.getContext().put("pageBean",data);
         return SUCCESS;
     }
 
     public String findAllDept(){
-        List<Department> departments = departmentService.findAllDepartment();
+        List<Department> departments =
+                departmentService.findAllDepartment();
         ActionContext.getContext().getSession().put("departments",departments);
         return SUCCESS;
     }
     @Override
     public Department getModel() {
-        return null;
+        return department;
     }
-    
+
 
     public int getPageNum() {
         return pageNum;
@@ -88,5 +91,13 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public DepartmentService getDepartmentService() {
+        return departmentService;
+    }
+
+    public void setDepartmentService(DepartmentService departmentService) {
+        this.departmentService = departmentService;
     }
 }

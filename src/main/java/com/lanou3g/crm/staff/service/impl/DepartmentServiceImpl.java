@@ -1,13 +1,11 @@
-package com.lanou3g.crm.staff.dao.impl;
+package com.lanou3g.crm.staff.service.impl;
 
-import com.lanou3g.crm.base.impl.BaseAction;
 import com.lanou3g.crm.staff.dao.DepartmentDao;
 import com.lanou3g.crm.staff.domain.Department;
-import com.lanou3g.crm.utils.PageHibernateCallback;
+import com.lanou3g.crm.staff.service.DepartmentService;
+import com.lanou3g.crm.utils.PageBean;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * .                       .::::.
@@ -30,45 +28,44 @@ import java.util.Map;
  * .                       '.:::::'                    ':'````..
  */
 
-public class DepartmentDaoImpl extends BaseAction<Department> implements DepartmentDao {
+public class DepartmentServiceImpl  implements DepartmentService{
+
+    private DepartmentDao departmentDao;
     @Override
     public List<Department> findAllDepartment() {
-        String sql = "from Department";
-        return findAll(sql);
+        return departmentDao.findAllDepartment();
     }
 
     @Override
     public void addDepartment(Department department) {
-        save(department);
+        departmentDao.addDepartment(department);
     }
 
     @Override
     public void updateDepartment(Department department) {
-        update(department);
+        departmentDao.updateDepartment(department);
     }
 
     @Override
     public Department findById(String depId) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id",depId);
-        return findSingle("from Department where depId=:id",map);
+        return departmentDao.findById(depId);
     }
 
     @Override
-    public int getTotalDept() {
-        String  sql = "select count(d) from Department d where 1=1";
-
-        List<Long> find = (List<Long>) getHibernateTemplate().find(sql);
-
-        if (find != null) {
-            return find.get(0).intValue();
-        }
-        return 0;
+    public PageBean<Department> findAllDeptByPage(Department department, int pageNum, int pageSize) {
+        int totalDept = departmentDao.getTotalDept();
+        PageBean<Department> pageBean = new PageBean<>(pageNum,pageSize,totalDept);
+        List<Department> data =
+                departmentDao.findGet(pageBean.getStartIndex(),pageBean.getPageSize());
+        pageBean.setData(data);
+        return pageBean;
     }
 
-    @Override
-    public List<Department> findGet(int startIndex, int pageSize) {
-        String sql = "from Department where 1=1 ";
-        return getHibernateTemplate().execute(new PageHibernateCallback<Department>(sql, startIndex, pageSize));
+    public DepartmentDao getDepartmentDao() {
+        return departmentDao;
+    }
+
+    public void setDepartmentDao(DepartmentDao departmentDao) {
+        this.departmentDao = departmentDao;
     }
 }
