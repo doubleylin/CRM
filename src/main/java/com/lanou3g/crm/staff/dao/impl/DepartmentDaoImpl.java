@@ -59,7 +59,6 @@ public class DepartmentDaoImpl extends BaseAction<Department> implements Departm
         String  sql = "select count(d) from Department d where 1=1";
 
         List<Long> find = (List<Long>) getHibernateTemplate().find(sql);
-
         if (find != null) {
             return find.get(0).intValue();
         }
@@ -69,6 +68,8 @@ public class DepartmentDaoImpl extends BaseAction<Department> implements Departm
     @Override
     public List<Department> findGet(int startIndex, int pageSize) {
         String sql = "from Department where 1=1 ";
-        return getHibernateTemplate().execute(new PageHibernateCallback<Department>(sql, startIndex, pageSize));
+        return getHibernateTemplate().
+                execute(new PageHibernateCallback<Department>
+                        (sql, startIndex, pageSize));
     }
 }

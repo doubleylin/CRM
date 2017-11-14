@@ -13,7 +13,6 @@
                      column="depId"
                      class="com.lanou3g.crm.staff.domain.Department"
                      not-null="true"
-                     cascade="all"
                      lazy="false"/>
 
 

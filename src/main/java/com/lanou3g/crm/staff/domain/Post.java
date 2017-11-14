@@ -28,6 +28,9 @@ public class Post {
     private String postId,postName;
 
     private Department department;
+
+
+    private Set<Staff> staffs = new HashSet<>();
     public Post() {
     }
 
@@ -71,5 +74,13 @@ public class Post {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public Set<Staff> getStaffs() {
+        return staffs;
+    }
+
+    public void setStaffs(Set<Staff> staffs) {
+        this.staffs = staffs;
     }
 }

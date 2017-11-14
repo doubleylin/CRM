@@ -1,6 +1,9 @@
 package com.lanou3g.crm.staff.domain;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * .                       .::::.
@@ -28,8 +31,8 @@ public class Staff {
     private String loginName,loginPwd,staffName,gender,postId;
     private Date onDutyDate;
 
-    private Post post;
     private Department department;
+    private Post post;
 
     public Staff() {
     }
@@ -43,7 +46,7 @@ public class Staff {
         this.staffName = staffName;
     }
 
-    public Staff(String staffId, String staffName, Post post, Department department) {
+    public Staff(String staffId, String staffName, Post post,Department department) {
         this.staffId = staffId;
         this.staffName = staffName;
         this.post = post;

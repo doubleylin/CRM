@@ -3,7 +3,9 @@ package com.lanou3g.crm.staff.dao.impl;
 import com.lanou3g.crm.base.impl.BaseAction;
 import com.lanou3g.crm.staff.dao.StaffDao;
 import com.lanou3g.crm.staff.domain.Staff;
+import org.hibernate.Session;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,4 +114,16 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
     public List<Staff> findStaffBystaffName(String staffName) {
         return findAll("from Staff where staffName like '%" + staffName + "%'");
     }
+
+    /**
+     * 通过主键id查询对象
+     * @param id
+     * @return
+     */
+    public Staff get(Serializable id){
+        Session session = currentSession();
+
+        return (Staff)session.get(Staff.class,id);
+    }
 }
+

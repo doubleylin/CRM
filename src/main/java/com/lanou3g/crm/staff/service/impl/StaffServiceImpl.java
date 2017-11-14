@@ -120,7 +120,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     /**
-     * 通过部门以及名字
+     * 通过部门以及名字查询结果
      * @param postId
      * @param staffName
      * @return
