@@ -76,4 +76,40 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
     public List<Staff> findAll() {
         return (List<Staff>) getHibernateTemplate().find("from Staff crm_staff");
     }
+
+    @Override
+    public void addStaff(Staff staff) {
+        save(staff);
+    }
+
+    @Override
+    public Staff findByStaffId(String staffId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",staffId);
+        return findSingle("from Staff where staffId=:id",map);
+    }
+
+    @Override
+    public void updateStaff(Staff staff) {
+        update(staff);
+    }
+
+    @Override
+    public List<Staff> findStaffByPostId(String postId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",postId);
+        return find("from Staff where postId=:id",map);
+    }
+
+    @Override
+    public List<Staff> findStaffByPostIdAndStaffName(String postId, String staffName) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",postId);
+        return find("from Staff where postId=:id and staffName like '%"+staffName+"%'",map);
+    }
+
+    @Override
+    public List<Staff> findStaffBystaffName(String staffName) {
+        return findAll("from Staff where staffName like '%" + staffName + "%'");
+    }
 }

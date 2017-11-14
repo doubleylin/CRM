@@ -27,6 +27,7 @@
             <result name="miss">/pages/error.jsp</result>
         </global-results>
     </package>
+    <!--登录以及职员管理-->
     <package name="staff" extends="common">
         <action name="login"
                 class="com.lanou3g.crm.staff.web.action.StaffAction"
@@ -38,6 +39,7 @@
 
         </action>
     </package>
+    <!--部门管理-->
     <package name="dept" extends="common">
 
         <action name="findAllDeptByPage"
@@ -50,6 +52,11 @@
                 method="findAllDept">
             <result name="success" >/pages/department/listDepartment.jsp</result>
         </action>
+        <action name="dfindAllDept"
+                class="com.lanou3g.crm.staff.web.action.DepartmentAction"
+                method="findAllDept">
+            <result name="success">/pages/post/addOrEditPost.jsp</result>
+        </action>
         <action name="addDepartment"
                 class="com.lanou3g.crm.staff.web.action.DepartmentAction"
                 method="addDepartment">
@@ -57,15 +64,16 @@
             <result name="input">/pages/department/addOrEditDepartment.jsp</result>
         </action>
     </package>
+    <!--职位管理-->
     <package name="post" extends="common">
-        <action name="findAllPost"
-                class="com.lanou3g.crm.staff.web.action.PostAction"
-                method="findAllPost">
-            <result name="success" >/pages/post/listPost.jsp</result>
-        </action>
         <action name="findPostByPage"
                 class="com.lanou3g.crm.staff.web.action.PostAction"
                 method="findPostByPage">
+            <result name="success">/pages/post/listPost.jsp</result>
+        </action>
+        <action name="findAllPost"
+                class="com.lanou3g.crm.staff.web.action.PostAction"
+                method="findAllPost">
             <result name="success">/pages/post/listPost.jsp</result>
         </action>
         <action name="addPost"

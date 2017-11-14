@@ -1,4 +1,5 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -39,8 +40,7 @@
 <form action="addDepartment.action" method="post">
     <table width="88%" border="0" class="emp_table" style="width:80%;">
         <tr>
-            <td>部门名称：</td>
-            <input type="hidden"name="depId" value="${param.depId}">
+            <td>部门名称：</td><input type="hidden" name="depId" value="${param.depId}">
             <td><input type="text" name="depName" value="${param.depName}"/></td>
         </tr>
     </table>

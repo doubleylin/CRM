@@ -29,27 +29,25 @@ public class Staff {
     private Date onDutyDate;
 
     private Post post;
+    private Department department;
 
     public Staff() {
     }
 
-    public Staff(String staffId, String loginName, String loginPwd, String staffName, String gender, String postId, Date onDutyDate) {
+    public Staff(String staffId, String staffName) {
         this.staffId = staffId;
-        this.loginName = loginName;
-        this.loginPwd = loginPwd;
         this.staffName = staffName;
-        this.gender = gender;
-        this.postId = postId;
-        this.onDutyDate = onDutyDate;
     }
 
-    public Staff(String loginName, String loginPwd, String staffName, String gender, String postId, Date onDutyDate) {
-        this.loginName = loginName;
-        this.loginPwd = loginPwd;
+    public Staff(String staffName) {
         this.staffName = staffName;
-        this.gender = gender;
-        this.postId = postId;
-        this.onDutyDate = onDutyDate;
+    }
+
+    public Staff(String staffId, String staffName, Post post, Department department) {
+        this.staffId = staffId;
+        this.staffName = staffName;
+        this.post = post;
+        this.department = department;
     }
 
     @Override
@@ -127,5 +125,13 @@ public class Staff {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

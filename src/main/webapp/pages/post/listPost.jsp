@@ -26,7 +26,7 @@
 
         <td width="57%" align="right">
             <%--添加职务 --%>
-            <a href="${pageContext.request.contextPath}/pages/post/addOrEditPost.jsp">
+            <a href="${pageContext.request.contextPath}dfindAllDept.action">
                 <img src="${pageContext.request.contextPath}/images/button/tianjia.gif"/>
             </a>
 
@@ -47,12 +47,12 @@
         <td width="6%" align="center">职务名称</td>
         <td width="7%" align="center">编辑</td>
     </tr>
-    <s:iterator value="#pageBean.data" var="post">
+    <s:iterator value="#session.pageBean.data" var="p">
         <tr class="tabtd1">
-            <td align="center">${post.department.depName}</td>
-            <td align="center">${post.postName}</td>
+            <td align="center">${p.department.depName}</td>
+            <td align="center">${p.postName}</td>
             <td width="7%" align="center">
-                <a href="${pageContext.request.contextPath}/findAllDept.action?postId=${post.postId}&postName=${post.postName}&depName=${post.department.depName}&depId=${post.department.depId}"><img
+                <a href="${pageContext.request.contextPath}dfindAllDept.action?&postId=${p.postId}&postName=${p.postName}&depName=${p.department.depName}&depId=${p.department.depId}"><img
                         src="${pageContext.request.contextPath}/images/button/modify.gif" class="img"/></a>
             </td>
         </tr>
@@ -64,13 +64,13 @@
 <table border="0" cellspacing="0" cellpadding="0" align="center">
     <tr>
         <td align="right">
-            <span>第<s:property value="#pageBean.pageNum"/>/<s:property value="#pageBean.totalPage"/>页</span>
+            <span>第<s:property value="#session.pageBean.pageNum"/>/<s:property value="#session.pageBean.totalPage"/>页</span>
             <span>
-                <a href="findAllPost">[首页]</a>&nbsp;&nbsp;
-            <a href="findAllPost?pageNum=${pageBean.pageNum - 1}">[上一页]</a>&nbsp;&nbsp;
-                <s:iterator begin="#pageBean.start" end="#pageBean.end" var="num">
-                    <s:if test="#num <= #pageBean.totalPage">
-                            <a href="findAllPost?pageNum=${num}">
+                <a href="findPostByPage">[首页]</a>&nbsp;&nbsp;
+            <a href="findPostByPage?pageNum=${session.pageBean.pageNum - 1}">[上一页]</a>&nbsp;&nbsp;
+                <s:iterator begin="#session.pageBean.start" end="#session.pageBean.end" var="num">
+                    <s:if test="#num <= #session.pageBean.totalPage">
+                            <a href="findPostByPage?pageNum=${num}">
                             <s:property value="#num"/> </a>&nbsp;&nbsp;
                     </s:if>
                 </s:iterator>
@@ -79,11 +79,11 @@
 
                         <c:when test="${pageBean.pageNum >= pageBean.totalPage}">href="#"</c:when>
 
-                        <c:otherwise>href="findAllPost?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
+                        <c:otherwise>href="findPostByPage?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
 
                     </c:choose>
             >[下一页]</a>&nbsp;&nbsp;
-            <a href="findAllPost?pageNum=${pageBean.totalPage}">[尾页]</a>
+            <a href="findPostByPage?pageNum=${pageBean.totalPage}">[尾页]</a>
         </span>
         </td>
     </tr>

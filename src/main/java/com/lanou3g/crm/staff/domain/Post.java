@@ -25,22 +25,19 @@ import java.util.Set;
  */
 
 public class Post {
-    private String postId,postName,depId;
+    private String postId,postName;
 
     private Department department;
-    private Set<Staff> staffs = new HashSet<>();
     public Post() {
     }
 
-    public Post(String postId, String postName, String depId) {
+    public Post(String postId, String postName) {
         this.postId = postId;
         this.postName = postName;
-        this.depId = depId;
     }
 
-    public Post(String postName, String depId) {
+    public Post(String postName) {
         this.postName = postName;
-        this.depId = depId;
     }
 
     @Override
@@ -48,7 +45,7 @@ public class Post {
         return "Post{" +
                 "postId='" + postId + '\'' +
                 ", postName='" + postName + '\'' +
-                ", depId='" + depId + '\'' +
+                ", department=" + department +
                 '}';
     }
 
@@ -68,27 +65,11 @@ public class Post {
         this.postName = postName;
     }
 
-    public String getDepId() {
-        return depId;
-    }
-
-    public void setDepId(String depId) {
-        this.depId = depId;
-    }
-
     public Department getDepartment() {
         return department;
     }
 
     public void setDepartment(Department department) {
         this.department = department;
-    }
-
-    public Set<Staff> getStaffs() {
-        return staffs;
-    }
-
-    public void setStaffs(Set<Staff> staffs) {
-        this.staffs = staffs;
     }
 }

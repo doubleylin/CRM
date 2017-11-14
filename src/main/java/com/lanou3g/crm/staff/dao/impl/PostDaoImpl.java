@@ -34,7 +34,8 @@ import java.util.Map;
 public class PostDaoImpl extends BaseAction<Post> implements PostDao {
     @Override
     public List<Post> findAllPost() {
-        return findAll("from Post");
+        String sql = "from Post";
+        return findAll(sql);
     }
 
     @Override

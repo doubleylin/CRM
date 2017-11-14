@@ -52,10 +52,11 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
 
     private int pageNum;
     private int pageSize = 5;
+    private List<Post> posts;
 
     public String findAllPost(){
-        List<Post> posts = postService.findAllPost();
-        ActionContext.getContext().getSession().put("posts",posts);
+        posts = postService.findAllPost();
+        ActionContext.getContext().getSession().put("posts", posts);
         return SUCCESS;
     }
 
@@ -63,8 +64,8 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
         if (pageNum==0){
             pageNum=1;
         }
-        PageBean<Post> data = postService.findPostByPage(post,pageNum,pageSize);
-        ActionContext.getContext().getSession().put("pageBean",data);
+        PageBean<Post> all = postService.findPostByPage(post,pageNum,pageSize);
+        ActionContext.getContext().getSession().put("pageBean",all);
         return SUCCESS;
     }
 
@@ -73,11 +74,16 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
             addActionError("请选择部门");
             return INPUT;
         }
-        if (postId.equals("")){
+        if ("".equals(post.getPostName())){
+            addActionError("职务名称不能为空");
+            return INPUT;
+        }
+        if (post.getPostId().equals("")) {
             Department department = departmentService.findById(deptId);
             post.setDepartment(department);
             postService.addPost(post);
-        }else {
+
+        } else {
             Department department = departmentService.findById(deptId);
             post.setDepartment(department);
             post.setPostId(postId);
@@ -113,5 +119,21 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
 
     public void setPostId(String postId) {
         this.postId = postId;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

@@ -58,10 +58,10 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
         if (pageNum == 0){
             pageNum = 1;
         }
-        PageBean<Department> data =
+        PageBean<Department> all =
                 departmentService.findAllDeptByPage
                 (department,pageNum,pageSize);
-        ActionContext.getContext().put("pageBean",data);
+        ActionContext.getContext().put("pageBean",all);
         return SUCCESS;
     }
 
@@ -93,11 +93,4 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
         this.pageSize = pageSize;
     }
 
-    public DepartmentService getDepartmentService() {
-        return departmentService;
-    }
-
-    public void setDepartmentService(DepartmentService departmentService) {
-        this.departmentService = departmentService;
-    }
 }
