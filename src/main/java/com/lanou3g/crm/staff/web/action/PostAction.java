@@ -69,6 +69,12 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
         return SUCCESS;
     }
 
+    /**
+     * 添加(修改)职位
+     * 如果传到页面部门id,则执行修改方法
+     * 如果没有传过来id,执行添加方法
+     * @return
+     */
     public String addPost(){
 
         if (post.getPostId().equals("")) {

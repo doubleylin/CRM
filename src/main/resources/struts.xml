@@ -15,7 +15,7 @@
     <package name="common" extends="json-default">
         <interceptors>
             <interceptor name="Interceptor" class="com.lanou3g.crm.utils.Interceptor">
-                <param name="includeMethods">addDepartment,addPost,addStaff,editStaff</param>
+                <param name="includeMethods">addDepartment,addPost,addStaff,updateStaff</param>
             </interceptor>
             <interceptor-stack name="myInterceptorStack">
                 <interceptor-ref name="Interceptor"/>
@@ -53,9 +53,13 @@
         <action name="showStaff"
                 class="staffAction"
                 method="showStaff">
+            <result name="success" type="chain">findStaffsByPage</result>
+        </action>
+        <action name="findStaffsByPage"
+                class="staffAction"
+                method="findStaffsByPage">
             <result name="success">/pages/staff/listStaff.jsp</result>
         </action>
-
         <action name="listStaff"
                 class="staffAction"
                 method="listStaff">
@@ -64,7 +68,7 @@
         <action name="addStaff"
                 class="staffAction"
                 method="addStaff">
-            <result name="success" type="chain">listStaff</result>
+            <result name="success" type="chain">findStaffsByPage</result>
             <result name="input">/pages/staff/addStaff.jsp</result>
         </action>
         <action name="findDeptAndPost"
@@ -75,7 +79,7 @@
         <action name="updateStaff"
                 class="staffAction"
                 method="updateStaff">
-            <result name="success" type="chain">listStaff</result>
+            <result name="success" type="chain">findStaffsByPage</result>
         </action>
     </package>
     <!--部门管理-->

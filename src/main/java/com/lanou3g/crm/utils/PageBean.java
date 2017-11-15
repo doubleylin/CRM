@@ -42,10 +42,17 @@ public class PageBean<T> {
                 '}';
     }
 
-    public PageBean(int pageNum, int pageSize, int tatalRecord) {
+    public PageBean(int pageNum, int pageSize, int totalRecord, int startIndex) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
-        this.totalRecord = tatalRecord;
+        this.totalRecord = totalRecord;
+        this.startIndex = startIndex;
+    }
+
+    public PageBean(int pageNum, int pageSize, int totalRecord) {
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        this.totalRecord = totalRecord;
         this.start = 1;
         this.end = 10;
 //        if(this.totalPage <= 10){

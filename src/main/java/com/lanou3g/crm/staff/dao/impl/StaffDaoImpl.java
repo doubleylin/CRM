@@ -70,9 +70,7 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
     }
 
     /**
-     * 登录验证
-     * 账号不存在跳转到错误界面
-     * 账号存在检查密码是否正确
+     * 查询所有的职员
      * @return
      */
     @Override
@@ -80,11 +78,20 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
         return (List<Staff>) getHibernateTemplate().find("from Staff crm_staff");
     }
 
+    /**
+     * 添加职员
+     * @param staff
+     */
     @Override
     public void addStaff(Staff staff) {
         save(staff);
     }
 
+    /**
+     * 查询id为XXX的某个职员
+     * @param staffId
+     * @return
+     */
     @Override
     public Staff findByStaffId(String staffId) {
         Map<String,Object> map = new HashMap<>();
@@ -92,18 +99,30 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
         return findSingle("from Staff where staffId=:id",map);
     }
 
+    /**
+     * 修改职员的信息
+     * @param staff
+     */
     @Override
     public void updateStaff(Staff staff) {
         update(staff);
     }
 
+    /**
+     * 通过职位查询
+     * @param postId
+     * @return
+     */
     @Override
     public List<Staff> findStaffByPostId(String postId) {
         Map<String,Object> map = new HashMap<>();
         map.put("id",postId);
         return find("from Staff where postId=:id",map);
     }
-
+    /**
+     * 查询某个职位是否有名字像XXX的职员
+     * 显示
+     */
     @Override
     public List<Staff> findStaffByPostIdAndStaffName(String postId, String staffName) {
         Map<String,Object> map = new HashMap<>();
@@ -111,11 +130,20 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
         return find("from Staff where postId=:id and staffName like '%"+staffName+"%'",map);
     }
 
+    /**
+     * 查询名字叫XXX的职员
+     * @param staffName
+     * @return
+     */
     @Override
     public List<Staff> findStaffBystaffName(String staffName) {
         return findAll("from Staff where staffName like '%" + staffName + "%'");
     }
 
+    /**
+     * 获取职员的条数
+     * @return
+     */
     @Override
     public int getTotalStaff() {
         String  sql = "select count(s) from Staff s where 1=1";
@@ -128,9 +156,15 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
         return 0;
     }
 
+    /**
+     * 分页显示
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
     @Override
     public List<Staff> findStaffByPage(int startIndex, int pageSize) {
-        String sql = "from Post where 1=1 ";
+        String sql = "from Staff where 1=1 ";
         return getHibernateTemplate().execute(new PageHibernateCallback<Staff>(sql, startIndex, pageSize));
     }
 

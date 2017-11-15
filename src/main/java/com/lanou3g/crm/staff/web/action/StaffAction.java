@@ -7,6 +7,7 @@ import com.lanou3g.crm.staff.service.DepartmentService;
 import com.lanou3g.crm.staff.service.PostService;
 import com.lanou3g.crm.staff.service.StaffService;
 import com.lanou3g.crm.utils.CrmStringUtils;
+import com.lanou3g.crm.utils.PageBean;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -40,18 +41,35 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
     @Resource(name = "postService")
     private PostService postService;
 
-
+    /**
+     * 查询部门
+     * @return
+     */
     public String findDepartment() {
         departments = departmentService.findAllDepartment();
         return SUCCESS;
     }
 
-
+    /**
+     * 查询某个部门所有职位
+     * @return
+     */
     public String findPostByDepId() {
         posts = postService.findPostByDepId(this.depId);
         return SUCCESS;
     }
 
+    /**
+     * 显示职员
+     * 逻辑:
+     * 如果部门,职位,模糊名字都不填:查询全部
+     * 选择部门:查询此部门下所有职位的所有职员
+     * 选择部门+职位:查询这个职位下所有职员
+     * 只填写模糊名字:查询名字包含输入字符串的职员
+     * 填写部门+名字:查询某个部门名字包含输入字符串的职员
+     * 填写全部:查询某个职位名字包含输入字符的职员
+     * @return
+     */
     public String showStaff() {
 
         if ("".equals(staff.getStaffName())) {
@@ -95,6 +113,10 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
         return SUCCESS;
     }
 
+    /**
+     * 添加职员
+     * @return
+     */
     public String addStaff() {
 
         if ("".equals(staff.getLoginName())) {
@@ -135,12 +157,21 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
         return SUCCESS;
     }
 
+    /**
+     * 罗列显示职员
+     * @return
+     */
     public String listStaff() {
         List<Staff> staffs = staffService.findAll();
         ActionContext.getContext().getSession().put("staffs", staffs);
         return SUCCESS;
     }
 
+    /**
+     * 查找部门和职位
+     * 用于二级联动
+     * @return
+     */
     public String findDeptAndPost() {
         staff = staffService.findByStaffId(staff.getStaffId());
         List<Department> departments = departmentService.findAllDepartment();
@@ -151,6 +182,10 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
         return SUCCESS;
     }
 
+    /**
+     * 修改职员
+     * @return
+     */
     public String updateStaff() {
         Department byId = departmentService.findById(staff.getDepartment().getDepId());
         staff.setDepartment(byId);
@@ -161,6 +196,12 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
         return SUCCESS;
     }
 
+    /**
+     * 登录判断
+     * 如果填入的账号密码和数据库数据匹配,则登录
+     * 如果不匹配则返回错误
+     * @return
+     */
     public String login() {
         Staff s = staffService.login(staff.getLoginName(), staff.getLoginPwd());
         if (s != null) {
@@ -179,6 +220,33 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
             addFieldError("msg", "用户名密码不能");
             ActionContext.getContext().getSession().put("msg", "用户名密码不能为空 !~~~~");
         }
+    }
+    private int pageNum;
+    private int pageSize = 10;
+    private List<Staff> staffs;
+
+
+    /**
+     * 获取所有的职员
+     * @return
+     */
+    public String findAllStaffs(){
+        staffs = staffService.findAll();
+        ActionContext.getContext().getSession().put("staffs", staffs);
+        return SUCCESS;
+    }
+
+    /**
+     * 分页
+     * @return
+     */
+    public String findStaffsByPage(){
+        if (pageNum==0){
+            pageNum=1;
+        }
+        PageBean<Staff> all = staffService.findStaffByPage(staff,pageNum,pageSize);
+        ActionContext.getContext().getSession().put("pageBean",all);
+        return SUCCESS;
     }
 
     @Override

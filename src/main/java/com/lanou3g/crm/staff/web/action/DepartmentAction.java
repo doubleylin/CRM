@@ -42,6 +42,14 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
     private int pageNum;
     private int pageSize = 5;
 
+    /**
+     * 添加部门
+     * 添加判断
+     * 部门名称不能空
+     * 如果到页面传过来id则执行修改方法
+     * 如果没有传到页面id则执行
+     * @return
+     */
     public String addDepartment(){
         if (department.getDepName().trim().equals("")){
             addActionError("部门名称空了!");
@@ -54,6 +62,11 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
         }
         return SUCCESS;
     }
+
+    /**
+     * 分页显示部门
+     * @return
+     */
     public String findAllDeptByPage(){
         if (pageNum == 0){
             pageNum = 1;
@@ -65,6 +78,10 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
         return SUCCESS;
     }
 
+    /**
+     * 查询所有部门
+     * @return
+     */
     public String findAllDept(){
         List<Department> departments =
                 departmentService.findAllDepartment();

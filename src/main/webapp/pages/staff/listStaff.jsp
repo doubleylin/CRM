@@ -1,4 +1,5 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -79,7 +80,7 @@
 		<td width="10%" align="center">职务</td>
 		<td width="10%" align="center">编辑</td>
 	</tr>
-	<s:iterator value="#session.staffs" var="s">
+	<s:iterator value="#session.pageBean.data" var="s">
 
 		<tr class="tabtd2">
 			<td align="center">${s.staffName}</td>
@@ -102,21 +103,35 @@
 </table>
 
 
-<%--
+
 <table border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr>
-    <td align="right">
-    	<span>第1/3页</span>
-        <span>
-        	<a href="#">[首页]</a>&nbsp;&nbsp;
-            <a href="#">[上一页]</a>&nbsp;&nbsp;
-            <a href="#">[下一页]</a>&nbsp;&nbsp;
-            <a href="#">[尾页]</a>
+	<tr>
+		<td align="right">
+			<span>第<s:property value="#session.pageBean.pageNum"/>/<s:property value="#session.pageBean.totalPage"/>页</span>
+			<span>
+                <a href="findStaffsByPage">[首页]</a>&nbsp;&nbsp;
+            <a href="findStaffsByPage?pageNum=${session.pageBean.pageNum - 1}">[上一页]</a>&nbsp;&nbsp;
+                <s:iterator begin="#session.pageBean.start" end="#session.pageBean.end" var="num">
+					<s:if test="#num <= #session.pageBean.totalPage">
+                            <a href="findStaffsByPage?pageNum=${num}">
+                            <s:property value="#num"/> </a>&nbsp;&nbsp;
+					</s:if>
+				</s:iterator>
+            <a
+					<c:choose>
+
+						<c:when test="${pageBean.pageNum >= pageBean.totalPage}">href="#"</c:when>
+
+						<c:otherwise>href="findStaffsByPage?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
+
+					</c:choose>
+			>[下一页]</a>&nbsp;&nbsp;
+            <a href="findStaffsByPage?pageNum=${pageBean.totalPage}">[尾页]</a>
         </span>
-    </td>
-  </tr>
+		</td>
+	</tr>
 </table>
---%>
+
 <script>
 	$(function () {
 		$.post("${pageContext.request.contextPath}/findDepartment", null,

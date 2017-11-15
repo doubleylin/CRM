@@ -133,8 +133,8 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public PageBean<Staff> findStaffByPage(Staff staff, int pageNum, int pageSize) {
-        int totalPost = staffDao.getTotalStaff();
-        PageBean<Staff> pageBean = new PageBean<>(pageNum,pageSize,totalPost);
+        int totalStaff = staffDao.getTotalStaff();
+        PageBean<Staff> pageBean = new PageBean<>(pageNum,pageSize,totalStaff);
         List<Staff> data =
                 staffDao.findStaffByPage(pageBean.getStartIndex(),pageBean.getPageSize());
         pageBean.setData(data);

@@ -37,16 +37,29 @@ public class DepartmentDaoImpl extends BaseAction<Department> implements Departm
         return findAll(sql);
     }
 
+    /**
+     * 添加部门
+     * @param department
+     */
     @Override
     public void addDepartment(Department department) {
         save(department);
     }
 
+    /**
+     * 修改部门
+     * @param department
+     */
     @Override
     public void updateDepartment(Department department) {
         update(department);
     }
 
+    /**
+     * 通过部门id查询部门
+     * @param depId
+     * @return
+     */
     @Override
     public Department findById(String depId) {
         Map<String, Object> map = new HashMap<>();
@@ -54,6 +67,10 @@ public class DepartmentDaoImpl extends BaseAction<Department> implements Departm
         return findSingle("from Department where depId=:id",map);
     }
 
+    /**
+     * 获取部门数
+     * @return
+     */
     @Override
     public int getTotalDept() {
         String  sql = "select count(d) from Department d where 1=1";
@@ -65,6 +82,12 @@ public class DepartmentDaoImpl extends BaseAction<Department> implements Departm
         return 0;
     }
 
+    /**
+     * 分页显示
+     * @param startIndex  开始的位置
+     * @param pageSize   一页显示多少
+     * @return
+     */
     @Override
     public List<Department> findGet(int startIndex, int pageSize) {
         String sql = "from Department where 1=1 ";
