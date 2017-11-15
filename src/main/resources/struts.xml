@@ -45,7 +45,7 @@
         </action>
         <action name="findPostByDepId"
                 class="staffAction"
-                method="findPostByDeptId">
+                method="findPostByDepId">
             <result name="success" type="json">
                 <param name="root">posts</param>
             </result>
@@ -55,6 +55,7 @@
                 method="showStaff">
             <result name="success">/pages/staff/listStaff.jsp</result>
         </action>
+
         <action name="listStaff"
                 class="staffAction"
                 method="listStaff">

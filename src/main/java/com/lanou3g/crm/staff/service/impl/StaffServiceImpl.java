@@ -3,6 +3,7 @@ package com.lanou3g.crm.staff.service.impl;
 import com.lanou3g.crm.staff.dao.StaffDao;
 import com.lanou3g.crm.staff.service.StaffService;
 import com.lanou3g.crm.staff.domain.Staff;
+import com.lanou3g.crm.utils.PageBean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -128,6 +129,16 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<Staff> findStaffByPostIdAndStaffName(String postId, String staffName) {
         return staffDao.findStaffByPostIdAndStaffName(postId, staffName);
+    }
+
+    @Override
+    public PageBean<Staff> findStaffByPage(Staff staff, int pageNum, int pageSize) {
+        int totalPost = staffDao.getTotalStaff();
+        PageBean<Staff> pageBean = new PageBean<>(pageNum,pageSize,totalPost);
+        List<Staff> data =
+                staffDao.findStaffByPage(pageBean.getStartIndex(),pageBean.getPageSize());
+        pageBean.setData(data);
+        return pageBean;
     }
 
     /**

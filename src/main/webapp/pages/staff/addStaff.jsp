@@ -37,7 +37,7 @@
 	</tr>
 </table>
 
-<form action="addStaff.action" method="Post">
+<form action="${pageContext.request.contextPath}/addStaff.action" method="Post">
 	<table width="88%" border="0" class="emp_table" style="width:80%;">
 		<tr>
 			<td>登录名：</td>

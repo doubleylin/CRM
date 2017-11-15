@@ -35,5 +35,7 @@ public interface StaffDao {
     List<Staff> findStaffByPostId(String postId);
     List<Staff> findStaffByPostIdAndStaffName(String postId,String staffName);
     List<Staff> findStaffBystaffName(String staffName);
+    int getTotalStaff();
+    List<Staff> findStaffByPage(int startIndex, int pageSize);
 
 }

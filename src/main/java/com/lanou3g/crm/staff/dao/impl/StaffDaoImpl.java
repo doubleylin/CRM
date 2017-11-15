@@ -3,6 +3,7 @@ package com.lanou3g.crm.staff.dao.impl;
 import com.lanou3g.crm.base.impl.BaseAction;
 import com.lanou3g.crm.staff.dao.StaffDao;
 import com.lanou3g.crm.staff.domain.Staff;
+import com.lanou3g.crm.utils.PageHibernateCallback;
 import org.hibernate.Session;
 
 import java.io.Serializable;
@@ -113,6 +114,24 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
     @Override
     public List<Staff> findStaffBystaffName(String staffName) {
         return findAll("from Staff where staffName like '%" + staffName + "%'");
+    }
+
+    @Override
+    public int getTotalStaff() {
+        String  sql = "select count(s) from Staff s where 1=1";
+
+        List<Long> find = (List<Long>) getHibernateTemplate().find(sql);
+
+        if (find != null) {
+            return find.get(0).intValue();
+        }
+        return 0;
+    }
+
+    @Override
+    public List<Staff> findStaffByPage(int startIndex, int pageSize) {
+        String sql = "from Post where 1=1 ";
+        return getHibernateTemplate().execute(new PageHibernateCallback<Staff>(sql, startIndex, pageSize));
     }
 
     /**

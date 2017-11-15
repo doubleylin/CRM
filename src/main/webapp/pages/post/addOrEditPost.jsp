@@ -41,7 +41,7 @@
         <tr>
             <td>选择部门：</td>
 
-            <td><select name="depId">
+            <td><select name="department.depId">
                 <option value="-1" selected>----请--选--择----</option>
                 <s:iterator value="#session.departments" var="dep">
                     <option value="${dep.depId}" <c:if test="${dep.depId eq param.depId}">

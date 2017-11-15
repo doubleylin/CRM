@@ -1,6 +1,7 @@
 package com.lanou3g.crm.staff.service;
 
 import com.lanou3g.crm.staff.domain.Staff;
+import com.lanou3g.crm.utils.PageBean;
 
 import java.util.List;
 
@@ -35,4 +36,5 @@ public interface StaffService {
     List<Staff> findStaffByPostId(String postId);
     List<Staff> findStaffByStaffName(String staffName);
     List<Staff> findStaffByPostIdAndStaffName(String postId,String staffName);
+    PageBean<Staff> findStaffByPage(Staff staff, int pageNum, int pageSize);
 }

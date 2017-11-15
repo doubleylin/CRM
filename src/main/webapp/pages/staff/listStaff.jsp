@@ -38,7 +38,7 @@
 </table>
 
 <!-- 查询条件：马上查询 -->
-<form staffId="conditionFormId" action="${pageContext.request.contextPath}showStaff.action" method="Post">
+<form staffId="conditionFormId" action="${pageContext.request.contextPath}/showStaff.action" method="Post">
 	<table width="88%" border="0" style="margin: 20px;">
 		<tr>
 			<td width="80px">部门：</td>
@@ -89,7 +89,12 @@
 			<td align="center">${s.post.postName}</td>
 			<td width="7%" align="center">
 
-				<a href="${pageContext.request.contextPath}findDeptAndPost.action?loginName=${s.loginName}&loginPwd=${s.loginPwd}&staffName=${s.staffName}&gender=${staff.gender}&onDutyDate=${s.onDutyDate}&depId=${s.post.department.depId}&postId=${s.post.postId}&staffId=${s.staffId}"><img
+				<a href="${pageContext.request.contextPath}
+				findDeptAndPost.action?loginName=${s.loginName}&
+				loginPwd=${s.loginPwd}&staffName=${s.staffName}&
+				gender=${s.gender}&onDutyDate=${s.onDutyDate}&
+				depId=${s.post.department.depId}&postId=${s.post.postId}&
+				staffId=${s.staffId}"><img
 						src="${pageContext.request.contextPath}/images/button/modify.gif" class="img"/></a>
 			</td>
 		</tr>

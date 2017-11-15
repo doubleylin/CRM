@@ -70,6 +70,19 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
     }
 
     public String addPost(){
+
+        if (post.getPostId().equals("")) {
+            Department department = departmentService.findById(post.getDepartment().getDepId());
+            post.setDepartment(department);
+            postService.addPost(post);
+
+
+        } else {
+            Department department = departmentService.findById(post.getDepartment().getDepId());
+            post.setDepartment(department);
+            postService.updatePost(post);
+
+        }
         if ("-1".equals(deptId)){
             addActionError("请选择部门");
             return INPUT;
@@ -77,17 +90,6 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
         if ("".equals(post.getPostName())){
             addActionError("职务名称不能为空");
             return INPUT;
-        }
-        if (post.getPostId().equals("")) {
-            Department department = departmentService.findById(deptId);
-            post.setDepartment(department);
-            postService.addPost(post);
-
-        } else {
-            Department department = departmentService.findById(deptId);
-            post.setDepartment(department);
-            post.setPostId(postId);
-            postService.updatePost(post);
         }
         return SUCCESS;
     }
