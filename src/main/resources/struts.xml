@@ -69,7 +69,7 @@
         <action name="showStaff"
                 class="staffAction"
                 method="showStaff">
-            <result name="success" type="chain">findStaffsByPage</result>
+            <result name="success" >/pages/staff/listStaff.jsp</result>
         </action>
         <action name="findStaffsByPage"
                 class="staffAction"
@@ -84,7 +84,7 @@
         <action name="addStaff"
                 class="staffAction"
                 method="addStaff">
-            <result name="success" type="chain">findStaffsByPage</result>
+            <result name="success" type="chain">listStaff</result>
             <result name="input">/pages/staff/addStaff.jsp</result>
         </action>
         <action name="findDeptAndPost"
@@ -95,7 +95,7 @@
         <action name="updateStaff"
                 class="staffAction"
                 method="updateStaff">
-            <result name="success" type="chain">findStaffsByPage</result>
+            <result name="success" type="chain">listStaff</result>
         </action>
     </package>
     <!--部门管理-->
