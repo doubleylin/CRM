@@ -221,7 +221,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
             ActionContext.getContext().getSession().put("staff", s);
             return SUCCESS;
         }
-
+        addFieldError("msg","密码错误");
         return ERROR;
     }
     @SkipValidation

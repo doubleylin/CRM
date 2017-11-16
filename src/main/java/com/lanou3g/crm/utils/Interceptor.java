@@ -16,7 +16,7 @@ public class Interceptor extends MethodFilterInterceptor {
         Staff staff = (Staff) ActionContext.getContext().getSession().get("staff");
         System.out.println(staff);
         if (!"admin".equals(staff.getLoginName())) {
-            ActionContext.getContext().put("msg","你没有权限");
+            ActionContext.getContext().put("msg","对不起,你没有权限");
             return "miss";
         }
         return actionInvocation.invoke();
