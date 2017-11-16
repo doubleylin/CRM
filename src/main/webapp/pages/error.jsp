@@ -9,7 +9,7 @@
 </head>
 <body>
 	<font color="#f00">
-		FBI  Warning!
+		对不起,你没有这个权限!
 		<s:property value="#session.name"/>
 		<h1><s:property value="#msg"/> </h1>
 	</font>

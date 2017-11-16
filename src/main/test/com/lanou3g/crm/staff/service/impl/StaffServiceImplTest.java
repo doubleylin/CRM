@@ -1,9 +1,16 @@
-package com.lanou3g.crm.staff.service;
+package com.lanou3g.crm.staff.service.impl;
 
 import com.lanou3g.crm.staff.domain.Staff;
+import com.lanou3g.crm.staff.service.StaffService;
 import com.lanou3g.crm.utils.PageBean;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
+import javax.annotation.Resource;
+
+import static org.junit.Assert.*;
 
 /**
  * .                       .::::.
@@ -26,16 +33,18 @@ import java.util.List;
  * .                       '.:::::'                    ':'````..
  */
 
-public interface StaffService {
-    Staff login(String name,String password);
-    Staff overLogin(Staff staff);
-    List<Staff> findAll();
-    void addStaff(Staff staff);
-    void updateStaff(Staff staff);
-    void reLoginPwd(Staff staff,String rePwd);
-    Staff findByStaffId(String staffId);
-    List<Staff> findStaffByPostId(String postId);
-    List<Staff> findStaffByStaffName(String staffName);
-    List<Staff> findStaffByPostIdAndStaffName(String postId,String staffName);
-    PageBean<Staff> findStaffByPage(Staff staff, int pageNum, int pageSize);
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:spring/*.xml")
+public class StaffServiceImplTest {
+
+    @Resource
+    private StaffService staffService;
+
+    @Test
+    public void test(){
+        PageBean<Staff> staffs = staffService.findStaffByPage(null, 2, 10);
+        staffs.getData().forEach(System.out::println);
+    }
+
+
 }

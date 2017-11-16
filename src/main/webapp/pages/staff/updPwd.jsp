@@ -33,7 +33,7 @@
 </head>
 
 <body class="updpwd">
-	<form action="/crm2/staff/staffAction_editPassword.action" method="post">
+	<form action="/reLoginPwd.action" method="post">
 		<table style="width: 200px">
 			<tr>
 				<td colspan="2">
@@ -42,15 +42,15 @@
 			</tr>
 			<tr>
 				<td>原始密码：</td>
-				<td><input type="password" name="oldPassword" value="" /></td>
+				<td><input type="password" name="pwd" value="" /></td>
 			</tr>
 			<tr>
 				<td>新&nbsp;密&nbsp;码：</td>
-				<td><input type="password" name="newPassword" value="" /></td>
+				<td><input type="password" name="repwd" value="" /></td>
 			</tr>
 			<tr>
 				<td>确认密码：</td>
-				<td><input type="password" name="reNewPassword" value="" /></td>
+				<td><input type="password" name="doubleRePwd" value="" /></td>
 			</tr>
 			<tr>
 				<td colspan="2">

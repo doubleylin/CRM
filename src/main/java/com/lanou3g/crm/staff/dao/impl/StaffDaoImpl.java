@@ -57,16 +57,29 @@ public class StaffDaoImpl extends BaseAction<Staff> implements StaffDao {
      * 返回登录界面
      * 不保存登录状态
      * 用户需重新登录
-     * @param name
-     * @param password
+     * @param staff
      * @return
      */
     @Override
-    public Staff overLogin(String name, String password) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", name);
-        map.put("password",password);
-        return overLogin(name,password);
+    public Staff overLogin(Staff staff) {
+        return staff;
+
+    }
+
+    /**
+     * 修改登录的密码
+     * @param staff
+     * @param rePwd
+     */
+    @Override
+    public void reLoginPwd(Staff staff, String rePwd) {
+        List<Staff> staffList = (List<Staff>) getHibernateTemplate().find("from Staff staff where staff.loginName=?", staff.getLoginName());
+        if (staffList.size()>0){
+            Staff staff1 = staffList.get(0);
+            staff1.setLoginPwd(rePwd);
+            getHibernateTemplate().update(staff1);
+        }
+
     }
 
     /**

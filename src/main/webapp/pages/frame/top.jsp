@@ -128,12 +128,12 @@
 													<%--是否使用弹出框？ javascript:modifypsw();
                                                     <a href="javascript:void(0)" onclick="javascript:modifypsw();"><font color="ffffff">更改口令</font></a>
                                                     --%>
-													<a href="${pageContext.request.contextPath}/pages/staff/updPwd.jsp" target="right">
+													<a href="${pageContext.request.contextPath}pageJSP.action" target="right">
 														<font color="ffffff">更改密码</font>
 													</a>
 												</td>
 												<td width="55" valign="middle">
-													<a href="${pageContext.request.contextPath}login.action" target="_top">
+													<a href="${pageContext.request.contextPath}overLogin.action" target="_top">
 														<font color="ffffff">重新登录</font></a></td>
 											</tr>
 										</table>

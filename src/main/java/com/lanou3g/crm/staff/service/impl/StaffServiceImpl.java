@@ -50,14 +50,13 @@ public class StaffServiceImpl implements StaffService {
      * 重新登录
      * 将session保存的账号密码移除
      * 退回到登录状态
-     * @param name
-     * @param password
+     * @param staff
      * @return
      */
 
     @Override
-    public Staff overLogin(String name, String password) {
-        return staffDao.overLogin(name,password);
+    public Staff overLogin(Staff staff ) {
+        return staffDao.overLogin(staff);
     }
 
     /**
@@ -85,6 +84,11 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public void updateStaff(Staff staff) {
         staffDao.updateStaff(staff);
+    }
+
+    @Override
+    public void reLoginPwd(Staff staff, String rePwd) {
+        staffDao.reLoginPwd(staff,rePwd);
     }
 
     /**

@@ -36,6 +36,22 @@
             <result name="input">/pages/login.jsp</result>
             <result name="error">/pages/error.jsp</result>
         </action>
+        <action name="overLogin"
+                class="staffAction"
+                method="overLogin">
+            <result name="success">/pages/login.jsp</result>
+        </action>
+        <!--jsp转action-->
+        <action name="pageJSP"
+                class="staffAction">
+            <result name="input">/pages/staff/updPwd.jsp</result>
+        </action>
+        <action name="reLoginPwd"
+                class="staffAction"
+                method="reLoginPwd">
+            <result name="success">/pages/frame/right.jsp</result>
+            <result name="error">/pages/staff/updPwd.jsp</result>
+        </action>
         <action name="findDepartment"
                 class="staffAction"
                 method="findDepartment">

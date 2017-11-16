@@ -37,11 +37,17 @@ public interface StaffDao {
 
     /**
      * 重登陆
-     * @param name
-     * @param password
+     * @param staff
      * @return
      */
-    Staff overLogin(String name,String password);
+    Staff overLogin(Staff staff);
+
+    /**
+     * 修改密码
+     * @param staff
+     * @param rePwd
+     */
+    void reLoginPwd(Staff staff,String rePwd);
 
     /**
      * 查询出所有的职员

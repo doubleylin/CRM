@@ -2,8 +2,6 @@ package com.lanou3g.crm.base.impl;
 
 import com.lanou3g.crm.base.BaseDao;
 import com.lanou3g.crm.utils.PageHibernateCallback;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ModelDriven;
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.Query;
 import org.hibernate.Session;

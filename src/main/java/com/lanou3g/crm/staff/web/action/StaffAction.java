@@ -13,6 +13,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import com.opensymphony.xwork2.ModelDriven;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -34,6 +35,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
     private List<Department> departments = new ArrayList<>();
     private List<Post> posts = new ArrayList<>();
     private String depId;
+    private String pwd;
+    private String repwd;
+    private String doubleRePwd;
 
 
     @Resource(name = "departmentService")
@@ -45,6 +49,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 查询部门
      * @return
      */
+    @SkipValidation
     public String findDepartment() {
         departments = departmentService.findAllDepartment();
         return SUCCESS;
@@ -54,6 +59,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 查询某个部门所有职位
      * @return
      */
+    @SkipValidation
     public String findPostByDepId() {
         posts = postService.findPostByDepId(this.depId);
         return SUCCESS;
@@ -70,6 +76,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 填写全部:查询某个职位名字包含输入字符的职员
      * @return
      */
+    @SkipValidation
     public String showStaff() {
 
         if ("".equals(staff.getStaffName())) {
@@ -117,6 +124,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 添加职员
      * @return
      */
+    @SkipValidation
     public String addStaff() {
 
         if ("".equals(staff.getLoginName())) {
@@ -161,6 +169,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 罗列显示职员
      * @return
      */
+    @SkipValidation
     public String listStaff() {
         List<Staff> staffs = staffService.findAll();
         ActionContext.getContext().getSession().put("staffs", staffs);
@@ -172,6 +181,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 用于二级联动
      * @return
      */
+    @SkipValidation
     public String findDeptAndPost() {
         staff = staffService.findByStaffId(staff.getStaffId());
         List<Department> departments = departmentService.findAllDepartment();
@@ -186,9 +196,11 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 修改职员
      * @return
      */
+    @SkipValidation
     public String updateStaff() {
         Department byId = departmentService.findById(staff.getDepartment().getDepId());
         staff.setDepartment(byId);
+        staff.setLoginPwd(CrmStringUtils.getMD5Value(staff.getLoginPwd()));
         staff.getPost().setDepartment(byId);
         Post post1 = postService.findPostByPostId(staff.getPost().getPostId());
         staff.setPost(post1);
@@ -202,8 +214,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 如果不匹配则返回错误
      * @return
      */
+    @SkipValidation
     public String login() {
-        Staff s = staffService.login(staff.getLoginName(), staff.getLoginPwd());
+        Staff s = staffService.login(staff.getLoginName(), CrmStringUtils.getMD5Value(staff.getLoginPwd()));
         if (s != null) {
             ActionContext.getContext().getSession().put("staff", s);
             return SUCCESS;
@@ -211,10 +224,28 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
 
         return ERROR;
     }
+    @SkipValidation
+    public String overLogin(){
+        Staff s = staffService.overLogin(staff);
+        ActionContext.getContext().getSession().remove("staff",s);
+        return SUCCESS;
+    }
+    @SkipValidation
+    public String reLoginPwd(){
+        Staff staff1 = (Staff) ActionContext.getContext().getSession().get("staff");
+        if (!CrmStringUtils.getMD5Value(pwd).equals(staff1.getLoginPwd())||!repwd.equals(doubleRePwd)){
+            addActionError("密码输入错误");
+            return ERROR;
+        }else {
+            staffService.reLoginPwd(staff1,CrmStringUtils.getMD5Value(repwd));
+            return SUCCESS;
+        }
+    }
 
     /**
      * 针对登录动作进行的验证
      */
+    @SkipValidation
     public void validateLogin() {
         if (StringUtils.isBlank(staff.getLoginName()) && StringUtils.isBlank(staff.getLoginPwd())) {
             addFieldError("msg", "用户名密码不能");
@@ -230,6 +261,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 获取所有的职员
      * @return
      */
+    @SkipValidation
     public String findAllStaffs(){
         staffs = staffService.findAll();
         ActionContext.getContext().getSession().put("staffs", staffs);
@@ -240,6 +272,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      * 分页
      * @return
      */
+    @SkipValidation
     public String findStaffsByPage(){
         if (pageNum==0){
             pageNum=1;
@@ -278,5 +311,51 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
         this.depId = depId;
     }
 
+    public Staff getStaff() {
+        return staff;
+    }
 
+    public void setStaff(Staff staff) {
+        this.staff = staff;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getRepwd() {
+        return repwd;
+    }
+
+    public void setRepwd(String repwd) {
+        this.repwd = repwd;
+    }
+
+    public String getDoubleRePwd() {
+        return doubleRePwd;
+    }
+
+    public void setDoubleRePwd(String doubleRePwd) {
+        this.doubleRePwd = doubleRePwd;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 }
