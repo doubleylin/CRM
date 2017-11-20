@@ -1,6 +1,7 @@
 package com.lanou3g.crm.staff.dao;
 
 
+import com.lanou3g.crm.staff.domain.Department;
 import com.lanou3g.crm.staff.domain.Post;
 
 import java.util.List;
@@ -32,6 +33,13 @@ public interface PostDao {
      * @return
      */
     List<Post> findAllPost();
+
+    /**
+     * 查询所有的部门
+     * @return
+     */
+    List<Department> findDept();
+
 
     /**
      * 添加职员

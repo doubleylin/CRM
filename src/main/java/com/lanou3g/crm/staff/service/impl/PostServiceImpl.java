@@ -1,6 +1,7 @@
 package com.lanou3g.crm.staff.service.impl;
 
 import com.lanou3g.crm.staff.dao.PostDao;
+import com.lanou3g.crm.staff.domain.Department;
 import com.lanou3g.crm.staff.domain.Post;
 import com.lanou3g.crm.staff.service.PostService;
 import com.lanou3g.crm.utils.PageBean;
@@ -34,6 +35,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> findAllPost() {
         return postDao.findAllPost();
+    }
+
+    @Override
+    public List<Department> findDept() {
+        return postDao.findDept();
     }
 
     @Override

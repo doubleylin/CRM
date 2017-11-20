@@ -1,5 +1,6 @@
 package com.lanou3g.crm.staff.service;
 
+import com.lanou3g.crm.staff.domain.Department;
 import com.lanou3g.crm.staff.domain.Post;
 import com.lanou3g.crm.utils.PageBean;
 
@@ -28,6 +29,8 @@ import java.util.List;
 
 public interface PostService {
     List<Post> findAllPost();
+
+    List<Department> findDept();
 
     void addPost(Post post);
 

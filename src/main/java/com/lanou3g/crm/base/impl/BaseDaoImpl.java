@@ -6,7 +6,6 @@ import org.apache.struts2.ServletActionContext;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -44,12 +43,12 @@ import java.util.Map;
  * K:key
  * V:value
  */
-public class BaseAction<T> extends HibernateDaoSupport implements BaseDao<T> {
+public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
     protected T model;
 //    protected S service;
-    private final Class<? extends BaseAction> clazz;
+    private final Class<? extends BaseDaoImpl> clazz;
 
-    public BaseAction(){
+    public BaseDaoImpl(){
         //获取当前类的Class
         clazz = getClass();
         //获取父类的泛型参数

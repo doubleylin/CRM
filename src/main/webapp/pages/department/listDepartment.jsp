@@ -50,7 +50,7 @@
         <tr class="tabtd1">
             <td align="center">${dept.depName}</td>
             <td width="7%" align="center">
-                <a href="${pageContext.request.contextPath}/pages/department/addOrEditDepartment.jsp?depName=${dept.depName}&depId=${dept.depId}"><img
+                <a href="${pageContext.request.contextPath}findById.action?depId=${dept.depId}"><img
                         src="${pageContext.request.contextPath}/images/button/modify.gif" class="img"/></a>
             </td>
         </tr>

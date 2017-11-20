@@ -78,6 +78,12 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
         return SUCCESS;
     }
 
+    public String findById(){
+        Department byId = departmentService.findById(department.getDepId());
+        ActionContext.getContext().put("byId",byId);
+        return SUCCESS;
+    }
+
     /**
      * 查询所有部门
      * @return

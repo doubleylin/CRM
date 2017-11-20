@@ -13,7 +13,7 @@
 		<h1><s:property value="#msg"/> </h1>
 	</font>
 
-	<a href="javascript:void(0)" onclick="window.history.go(-2)"><img
+	<a href="javascript:void(0)" onclick="window.history.go(-1)"><img
 			src="${pageContext.request.contextPath}/images/button/tuihui.gif"/></a>
 </body>
 </html>

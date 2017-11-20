@@ -14,11 +14,16 @@
     <constant name="struts.multipart.maxSize" value="10485760"/>
     <package name="common" extends="json-default">
         <interceptors>
-            <interceptor name="Interceptor" class="com.lanou3g.crm.utils.Interceptor">
-                <param name="includeMethods">addDepartment,addPost,addStaff,updateStaff</param>
+            <interceptor name="Interceptor" class="com.lanou3g.crm.staff.web.interceptor.StaffInterceptor">
+                <param name="includeMethods">
+                    addDepartment,addPost,addStaff,updateStaff,interceptor</param>
+            </interceptor>
+            <interceptor name="loginInterceptor" class="com.lanou3g.crm.staff.web.interceptor.LoginInterceptor">
+                <param name="excludeMethods">login</param>
             </interceptor>
             <interceptor-stack name="myInterceptorStack">
                 <interceptor-ref name="Interceptor"/>
+                <interceptor-ref name="loginInterceptor"/>
                 <interceptor-ref name="defaultStack"/>
             </interceptor-stack>
         </interceptors>
@@ -52,6 +57,19 @@
             <result name="success">/pages/frame/right.jsp</result>
             <result name="error">/pages/staff/updPwd.jsp</result>
         </action>
+        <action name="interceptor"
+                class="staffAction"
+                method="interceptor">
+            <result name="success">/pages/frame.jsp</result>
+            <result name="error">/pages/login.jsp</result>
+            <result name="login">/pages/login.jsp</result>
+        </action>
+        <!--分页查询-->
+        <action name="findAll"
+                class="staffAction"
+                method="findAll">
+            <result name="success" type="chain">findDepts</result>
+        </action>
         <action name="findDepartment"
                 class="staffAction"
                 method="findDepartment">
@@ -64,39 +82,110 @@
                 method="findPostByDepId">
             <result name="success" type="json">
                 <param name="root">posts</param>
+                <param name="includeProperties">
+                    \[\d\]\.postId,
+                    \[\d\]\.postName</param>
             </result>
         </action>
-        <action name="showStaff"
+
+        <!--添加时查询部门-->
+        <action name="addFindDept"
                 class="staffAction"
-                method="showStaff">
-            <result name="success" >/pages/staff/listStaff.jsp</result>
+                method="findDepts">
+            <result name="success">/pages/staff/addStaff.jsp</result>
         </action>
-        <action name="findStaffsByPage"
+        <action name="add"
                 class="staffAction"
-                method="findStaffsByPage">
-            <result name="success">/pages/staff/listStaff.jsp</result>
-        </action>
-        <action name="listStaff"
-                class="staffAction"
-                method="listStaff">
-            <result name="success">/pages/staff/listStaff.jsp</result>
-        </action>
-        <action name="addStaff"
-                class="staffAction"
-                method="addStaff">
-            <result name="success" type="chain">listStaff</result>
+                method="add">
+            <result name="success" type="chain">ListStaff</result>
             <result name="input">/pages/staff/addStaff.jsp</result>
         </action>
-        <action name="findDeptAndPost"
+        <action name="update"
                 class="staffAction"
-                method="findDeptAndPost">
+                method="update">
+            <result name="success" type="chain">ListStaff</result>
+            <result name="input">/pages/staff/editStaff.jsp</result>
+        </action>
+        <!--listStaff.jsp 二级联动-->
+        <action name="findDepts"
+                class="staffAction"
+                method="findDepts">
+            <result name="success">/pages/staff/listStaff.jsp</result>
+        </action>
+
+        <!--addStaff.jsp 二级联动-->
+        <action name="findDepart"
+                class="staffAction"
+                method="findDepts">
+            <result name="success">/pages/staff/addStaff.jsp</result>
+        </action>
+        <!--editStaff.jsp  二级联动-->
+        <action name="updatefindDept"
+                class="staffAction"
+                method="findDepts">
             <result name="success">/pages/staff/editStaff.jsp</result>
         </action>
-        <action name="updateStaff"
-                class="staffAction"
-                method="updateStaff">
-            <result name="success" type="chain">listStaff</result>
+        <!--查询全部-->
+        <action name="ListStaff" class="staffAction"  method="ListStaff">
+            <result name="success" type="chain">findDepts</result>
         </action>
+
+        <!--postId,depId,staffName-->
+        <action name="queryAll"
+                class="staffAction" method="highQuery">
+            <result name="success" type="json">
+                <param name="root">staffs</param>
+                <param name="includeProperties">
+                    \[\d\]\.staffId,
+                    \[\d\]\.loginName,
+                    \[\d\]\.staffName,
+                    \[\d\]\.gender,
+                    \[\d\]\.onDutyDate,
+                    \[\d\]\.post,
+                    \[\d\]\.post\.postName,
+                    \[\d\]\.post\.postId,
+                    \[\d\]\.post\.department\.depId,
+                    \[\d\]\.post\.department\.depName
+                </param>
+            </result>
+
+        </action>
+
+
+
+        <action name="findSome"
+                class="staffAction"
+                method="findSome">
+            <result type="json" name="success">
+                <param name="root">something</param>
+                <param name="excludeProperties">
+                    \[\d\]\.post\.department\.postSet,
+                    \[\d\]\.post\.staffSet
+                </param>
+            </result>
+        </action>
+
+        <action name="findByStaffId"
+                class="staffAction"
+                method="findByStaffId">
+            <result name="success" type="chain">updateFindDept</result>
+        </action>
+        <action name="updateFindDept"
+                class="staffAction"
+                method="findDepts">
+            <result name="success">/pages/staff/editStaff.jsp</result>
+        </action>
+
+
+
+
+
+
+
+
+
+
+
     </package>
     <!--部门管理-->
     <package name="dept" extends="common">
@@ -122,6 +211,12 @@
             <result name="success" type="chain">findAllDeptByPage</result>
             <result name="input">/pages/department/addOrEditDepartment.jsp</result>
         </action>
+
+        <action name="findById"
+                class="com.lanou3g.crm.staff.web.action.DepartmentAction"
+                method="findById">
+            <result name="success">/pages/department/addOrEditDepartment.jsp</result>
+        </action>
     </package>
     <!--职位管理-->
     <package name="post" extends="common">
@@ -141,6 +236,36 @@
             <result name="success" type="chain">findPostByPage</result>
             <result name="error">/pages/post/listPost.jsp</result>
             <result name="input">/pages/post/addOrEditPost.jsp</result>
+        </action>
+        <action name="findPostById"
+                class="com.lanou3g.crm.staff.web.action.PostAction"
+                method="findPostById">
+            <result name="success" type="chain">findDept</result>
+        </action>
+        <action name="findDept"
+                class="com.lanou3g.crm.staff.web.action.PostAction"
+                method="findDept">
+            <result name="success">/pages/post/addOrEditPost.jsp</result>
+        </action>
+    </package>
+
+    <package name="courseType" extends="common">
+        <action name="findCourseTypeByPage"
+                class="courseTypeAction"
+                method="findCourseTypeByPage">
+            <result name="success">/pages/coursetype/listCourse.jsp</result>
+            <result name="input">/pages/coursetype/listCourse.jsp</result>
+        </action>
+        <action name="addOrEditUI"
+                class="courseTypeAction"
+                method="addOrEditUI">
+            <result name="success" type="chain">findCourseTypeByPage</result>
+            <result name="input">/pages/coursetype/addOrEditCourse.jsp</result>
+        </action>
+        <action name="findAllCourse"
+                class="courseTypeAction"
+                method="findAllCourse">
+            <result name="success">/pages/coursetype/listCourse.jsp</result>
         </action>
     </package>
 </struts>

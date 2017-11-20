@@ -1,6 +1,8 @@
 package com.lanou3g.crm.staff.service.impl;
 
 import com.lanou3g.crm.staff.dao.StaffDao;
+import com.lanou3g.crm.staff.domain.Department;
+import com.lanou3g.crm.staff.domain.Post;
 import com.lanou3g.crm.staff.service.StaffService;
 import com.lanou3g.crm.staff.domain.Staff;
 import com.lanou3g.crm.utils.PageBean;
@@ -59,97 +61,145 @@ public class StaffServiceImpl implements StaffService {
         return staffDao.overLogin(staff);
     }
 
-    /**
-     * 查询所有对象
-     * @return
-     */
     @Override
-    public List<Staff> findAll() {
-        return staffDao.findAll();
+    public PageBean<Staff> findAll(Staff staff, int pageNum, int pageSize) {
+        int totalRecord = staffDao.getTotal(null);
+        int totalPage;
+        int startIndex = (pageNum - 1) * 5;
+        if(totalRecord % pageSize == 0){
+            totalPage = totalRecord / pageSize;
+        } else {
+            totalPage = totalRecord / pageSize + 1;
+        }
+        PageBean<Staff> pageBean = new PageBean<>(pageNum,pageSize,totalRecord,startIndex,totalPage);
+        List<Staff> data =
+                staffDao.findAll(pageBean.getStartIndex(),pageBean.getPageSize());
+        pageBean.setData(data);
+        return pageBean;
     }
 
+
+    @Override
+    public List<Department> findDept() {
+        return staffDao.findDept();
+    }
+
+
+
     /**
-     * 添加员工
+     * 修改密码
      * @param staff
+     * @param rePwd
      */
-    @Override
-    public void addStaff(Staff staff) {
-        staffDao.addStaff(staff);
-    }
-
-    /**
-     * 修改员工信息
-     * @param staff
-     */
-    @Override
-    public void updateStaff(Staff staff) {
-        staffDao.updateStaff(staff);
-    }
-
     @Override
     public void reLoginPwd(Staff staff, String rePwd) {
         staffDao.reLoginPwd(staff,rePwd);
     }
 
-    /**
-     * 通过员工Id查询员工
-     * @param staffId
-     * @return
-     */
     @Override
-    public Staff findByStaffId(String staffId) {
-        return staffDao.findByStaffId(staffId);
-    }
+    public PageBean<Staff> findSome(Staff staff, int pageNum, int pageSize) {
+        String depId = staff.getPost().getDepartment().getDepId();
+        String postId = staff.getPost().getPostId();
+        String staffName = staff.getStaffName();
 
-    /**
-     * 通过部门职位查询员工信息
-     * 不能二级联动查出来职位
-     * 因此只需要通过职位就可以查出员工信息
-     * @param postId
-     * @return
-     */
-    @Override
-    public List<Staff> findStaffByPostId(String postId) {
-        return staffDao.findStaffByPostId(postId);
-    }
+        String ss = returnSql(depId,postId,staffName);
 
-    /**
-     * 通过员工名字查询
-     * 这里设置的是模糊条件查询
-     * @param staffName
-     * @return
-     */
-    @Override
-    public List<Staff> findStaffByStaffName(String staffName) {
-        return staffDao.findStaffBystaffName(staffName);
-    }
-
-    /**
-     * 通过部门以及名字查询结果
-     * @param postId
-     * @param staffName
-     * @return
-     */
-    @Override
-    public List<Staff> findStaffByPostIdAndStaffName(String postId, String staffName) {
-        return staffDao.findStaffByPostIdAndStaffName(postId, staffName);
-    }
-
-    @Override
-    public PageBean<Staff> findStaffByPage(Staff staff, int pageNum, int pageSize) {
-        int totalStaff = staffDao.getTotalStaff();
-        PageBean<Staff> pageBean = new PageBean<>(pageNum,pageSize,totalStaff);
+        int totalRecord = staffDao.getTotal(ss);
+        int totalPage;
+        int startIndex = (pageNum - 1) * 5;
+        if(totalRecord % pageSize == 0){
+            totalPage = totalRecord / pageSize;
+        } else {
+            totalPage = totalRecord / pageSize + 1;
+        }
+        PageBean<Staff> pageBean = new PageBean<>
+                (pageNum,pageSize,totalRecord,startIndex,totalPage);
         List<Staff> data =
-                staffDao.findStaffByPage(pageBean.getStartIndex(),pageBean.getPageSize());
+                staffDao.findSome(ss, pageBean.getStartIndex(),pageBean.getPageSize());
         pageBean.setData(data);
         return pageBean;
     }
 
+    @Override
+    public List<Post> findPostByDepId(Staff staff) {
+        return staffDao.findPostByDepId(staff);
+    }
+
+    @Override
+    public void addStaff(Staff staff) {
+        staffDao.addStaff(staff);
+    }
+
+    @Override
+    public void updateStaff(Staff staff){
+        staffDao.updateStaff(staff);
+    }
+
     /**
-     * 登录验证
-     * @param
+     * 通过员工Id查询员工
+     * @param staff
      * @return
      */
+    @Override
+    public List<Staff> findByStaffId(Staff staff) {
+        return  staffDao.findByStaffId(staff);
+    }
+
+    @Override
+    public List<Staff> ListStaff() {
+        return staffDao.ListStaff();
+    }
+
+    @Override
+    public List<Staff> highQuery(String depId, String postId, String staffName) {
+        return staffDao.highQuery(depId, postId, staffName);
+    }
+
+
+    /**
+     * 高级查询的判断条件
+     * @param depId  判断传来的部门Id是否为空
+     * @param postId  判断传来的职位Id是否为空
+     * @param staffName  判断传来的员工名字是否为空
+     * @return
+     */
+    public String returnSql(String depId, String postId, String staffName){
+        String sql;
+        // 三个都空
+        if (depId.equals("-1")&&postId.equals("-1")&&staffName.equals("")){
+            sql = "";
+            return sql;
+        }
+        // 前两个空
+        if (depId.equals("-1")&&postId.equals("-1")){
+            sql = "and staffName like '%" + staffName + "%'";
+            return sql;
+        }
+        // 后两个空
+        if (postId.equals("-1")&&staffName.equals("")){
+            sql = "and post.department.depId='" + depId + "'";
+            return sql;
+        }
+        // 后一个空
+        if (staffName.equals("")){
+            sql="and post.department.depId ='" + depId + "' and post.postId='" + postId + "'";
+            return sql;
+        }
+
+        // 中间空
+        if (postId.equals("-1")){
+            sql = "and post.department.depId='" + depId + "' and staffName like '%" + staffName + "%'";
+            return sql;
+        }
+
+        // 三个都不空
+        sql = "and post.department.depId='" + depId + "' and post.postId='"
+                + postId + "' and staffName like '%" + staffName + "%'";
+
+        return sql;
+    }
+
+
 
 
     public StaffDao getStaffDao() {

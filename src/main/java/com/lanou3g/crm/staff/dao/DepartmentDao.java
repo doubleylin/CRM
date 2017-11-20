@@ -65,4 +65,5 @@ public interface DepartmentDao {
      * @return
      */
     List<Department> findGet(int startIndex,int pageSize);
+
 }

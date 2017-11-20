@@ -54,12 +54,28 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
     private int pageSize = 5;
     private List<Post> posts;
 
+    /**
+     * 获取所有的职位
+     * @return
+     */
     public String findAllPost(){
         posts = postService.findAllPost();
         ActionContext.getContext().getSession().put("posts", posts);
         return SUCCESS;
     }
+    /**
+     * 查询所有部门
+     */
+    public String findDept(){
+        List<Department> dept = postService.findDept();
+        ActionContext.getContext().getSession().put("dept",dept);
+        return SUCCESS;
+    }
 
+    /**
+     * 分页查询职员
+     * @return
+     */
     public String findPostByPage(){
         if (pageNum==0){
             pageNum=1;
@@ -97,6 +113,11 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
             addActionError("职务名称不能为空");
             return INPUT;
         }
+        return SUCCESS;
+    }
+    public String findPostById(){
+        Post byPostId = postService.findPostByPostId(post.getPostId());
+        ActionContext.getContext().put("byPostId",byPostId);
         return SUCCESS;
     }
 

@@ -1,6 +1,6 @@
 package com.lanou3g.crm.staff.dao.impl;
 
-import com.lanou3g.crm.base.impl.BaseAction;
+import com.lanou3g.crm.base.impl.BaseDaoImpl;
 import com.lanou3g.crm.staff.dao.DepartmentDao;
 import com.lanou3g.crm.staff.domain.Department;
 import com.lanou3g.crm.utils.PageHibernateCallback;
@@ -30,7 +30,7 @@ import java.util.Map;
  * .                       '.:::::'                    ':'````..
  */
 
-public class DepartmentDaoImpl extends BaseAction<Department> implements DepartmentDao {
+public class DepartmentDaoImpl extends BaseDaoImpl<Department> implements DepartmentDao {
     @Override
     public List<Department> findAllDepartment() {
         String sql = "from Department";

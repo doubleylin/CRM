@@ -24,5 +24,7 @@
     <mapping resource="com/lanou3g/crm/staff/domain/Staff.hbm.xml"/>
     <mapping resource="com/lanou3g/crm/staff/domain/Department.hbm.xml"/>
     <mapping resource="com/lanou3g/crm/staff/domain/Post.hbm.xml"/>
+    <mapping resource="com/lanou3g/crm/classCourse/domain/Classes.hbm.xml"/>
+    <mapping resource="com/lanou3g/crm/classCourse/domain/CourseType.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

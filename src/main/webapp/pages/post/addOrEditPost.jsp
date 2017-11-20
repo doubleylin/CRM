@@ -35,7 +35,10 @@
     <td width="3%" align="right"><img src="${pageContext.request.contextPath}/images/tright.gif"/></td>
   </tr>
 </table>
-
+<%
+String depId = request.getParameter("depId");
+    session.setAttribute("depId",depId);
+%>
 <form action="${pageContext.request.contextPath}addPost.action" method="post">
 	<table width="88%" border="0" class="emp_table" style="width:80%;">
         <tr>
@@ -43,16 +46,20 @@
 
             <td><select name="department.depId">
                 <option value="-1" selected>----请--选--择----</option>
-                <s:iterator value="#session.departments" var="dep">
-                    <option value="${dep.depId}" <c:if test="${dep.depId eq param.depId}">
-                        selected
-                    </c:if>>${dep.depName}</option>
+                <s:iterator value="#session.dept" var="dep">
+                    <s:if test="#dep.depId==#session.depId">
+                        <option value="${dep.depId}" selected="selected">${dep.depName}</option>
+                    </s:if>
+                    <s:else>
+                        <option value="${dep.depId}">${dep.depName}</option>
+                    </s:else>
                 </s:iterator>
             </select>
-                <input type="hidden" name="postId" value="${param.postId}">
             </td>
             <td>职务：</td>
-            <td><input type="text" name="postName" value="${param.postName}"/></td>
+            <td><s:textfield name="postName" value="%{#byPostId.postName}"/></td>
+            <td><s:hidden name="postId" value="%{#byPostId.postId}"/></td>
+
         </tr>
 	</table>
 </form>

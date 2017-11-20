@@ -1,5 +1,7 @@
 package com.lanou3g.crm.staff.dao;
 
+import com.lanou3g.crm.staff.domain.Department;
+import com.lanou3g.crm.staff.domain.Post;
 import com.lanou3g.crm.staff.domain.Staff;
 
 import java.util.List;
@@ -50,66 +52,65 @@ public interface StaffDao {
     void reLoginPwd(Staff staff,String rePwd);
 
     /**
-     * 查询出所有的职员
+     * 分页查询员工
+     * @param startIndex  开始索引的值
+     * @param pageSize  每页显示的信息数
      * @return
      */
-    List<Staff> findAll();
+    List<Staff> findAll(int startIndex, int pageSize);
+    /**
+     * 查询所有部门
+     * @return
+     */
+    List<Department> findDept();
 
     /**
-     * 添加职员
+     * 根据部门Id查询职位
+     * @param staff 员工对象(用来传递depId)
+     * @return
+     */
+    List<Post> findPostByDepId(Staff staff);
+
+    /**
+     * 高级查询
+     * @param ss 判断之后的拼接sql语句
+     * @param startIndex  开始索引的值
+     * @param pageSize 每页显示的信息数
+     * @return
+     */
+    List<Staff> findSome(String ss, int startIndex, int pageSize);
+
+    /**
+     * 员工的添加
      * @param staff
      */
     void addStaff(Staff staff);
 
     /**
-     * 通过职员id查询具体某个职员
-     * @param stsffId
-     * @return
-     */
-    Staff findByStaffId(String stsffId);
-
-    /**
-     * 修改职员信息
+     * 修改员工
      * @param staff
      */
     void updateStaff(Staff staff);
 
     /**
-     * 通过部门+职位查询职员
-     * 由于部门职位是二级联动
-     * 因此获取职位即可
-     * @param postId
+     * 根据员工Id查询对应员工信息
+     * @param staff
      * @return
      */
-    List<Staff> findStaffByPostId(String postId);
+    List<Staff> findByStaffId(Staff staff);
+
 
     /**
-     * 查询某个部门名字像XX的职员
-     * @param postId
-     * @param staffName
-     * @return
+     * 查询信息总数
+     * @param s 判断之后的拼接sql语句
+     * @return 返回将要查询信息的总数
      */
-    List<Staff> findStaffByPostIdAndStaffName(String postId,String staffName);
+    int getTotal(String s);
 
-    /**
-     * 查询名字像XX的所有人
-     * @param staffName
-     * @return
-     */
-    List<Staff> findStaffBystaffName(String staffName);
 
-    /**
-     * 获取所有的职员数
-     * @return
-     */
-    int getTotalStaff();
+    List<Staff> ListStaff();
 
-    /**
-     * 将显示的职员分页
-     * @param startIndex
-     * @param pageSize
-     * @return
-     */
-    List<Staff> findStaffByPage(int startIndex, int pageSize);
+
+    List<Staff> highQuery(String depId, String postId, String staffName);
 
 }

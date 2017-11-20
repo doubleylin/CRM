@@ -4,6 +4,7 @@ import com.lanou3g.crm.staff.domain.Staff;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -27,14 +28,17 @@ import org.apache.commons.lang3.StringUtils;
  * .                       '.:::::'                    ':'````..
  */
 
-public class LoginInterceptor extends AbstractInterceptor {
+public class LoginInterceptor extends MethodFilterInterceptor {
+
+
     @Override
-    public String intercept(ActionInvocation actionInvocation) throws Exception {
-        Staff staff = (Staff) ActionContext.getContext().getSession().get("staff");
-        if (StringUtils.isBlank(staff.getLoginName())){
-            String result = actionInvocation.invoke();
-            return result;
+    protected String doIntercept(ActionInvocation actionInvocation) throws Exception {
+        Staff list = (Staff) ActionContext.getContext().getSession().get("staff");
+        if (list == null) {
+            ActionContext.getContext().getSession().put("msg", "请登录");
+            return "login";
         }
         return actionInvocation.invoke();
     }
+
 }

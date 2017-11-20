@@ -51,6 +51,16 @@
           id="postService">
         <property name="postDao" ref="postDao"/>
     </bean>
+    
+    <!--班级配置-->
+    <!--<bean class="com.lanou3g.crm.classCourse.dao.impl.CourseTypeDaoImpl"-->
+          <!--id="courseTypeDao">-->
+        <!--<property name="sessionFactory" ref="sessionFactory"/>-->
+    <!--</bean>-->
+    <!--<bean class="com.lanou3g.crm.classCourse.service.impl.CourseTypeServiceImpl"-->
+          <!--id="classesService">-->
+        <!--<property name="courseTypeDao" ref="courseTypeDao"/>-->
+    <!--</bean>-->
 
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
@@ -122,6 +132,28 @@
         <!--配置顾问-->
         <aop:advisor advice-ref="postAdvisor"
                      pointcut-ref="postPointCut"/>
+
+    </aop:config>
+
+
+
+    <tx:advice id="classesAdvisor"
+               transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置切面-->
+    <aop:config>
+        <!--声明切点-->
+
+        <aop:pointcut id="classesPointCut"
+                      expression="execution(* com.lanou3g.crm.classCourse.service.impl.*.*(..))"/>
+
+        <!--配置顾问-->
+        <aop:advisor advice-ref="classesAdvisor"
+                     pointcut-ref="classesPointCut"/>
 
     </aop:config>
 </beans>

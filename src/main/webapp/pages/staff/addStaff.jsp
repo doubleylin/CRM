@@ -37,40 +37,49 @@
 	</tr>
 </table>
 
-<form action="${pageContext.request.contextPath}/addStaff.action" method="Post">
+<form action="${pageContext.request.contextPath}add.action" method="post">
 	<table width="88%" border="0" class="emp_table" style="width:80%;">
 		<tr>
 			<td>登录名：</td>
-			<td><input type="text" name="loginName" value=""/></td>
+			<td><input type="text" name="loginName" value="" /> </td>
 			<td>密码：</td>
-			<td><input type="password" name="loginPwd"/></td>
+			<td><input type="password" name="loginPwd" /> </td>
 		</tr>
 		<tr>
 			<td>姓名：</td>
-			<td><input type="text" name="staffName" value="" staffId="staffAction_add_staffName"/></td>
+			<td><input type="text" name="staffName" /> </td>
 			<td>性别：</td>
-			<td><input type="radio" name="gender" value="男"/>男
-				<input type="radio" name="gender" value="女"/>女
+			<td><input type="radio" name="gender"  value="男"/>男
+				<input type="radio" name="gender"  value="女"/>女
 			</td>
 		</tr>
 		<tr>
+
 			<td width="10%">所属部门：</td>
 			<td width="20%">
-				<select  id="s1" name="department.depId">
-				</select>
+				<select id="department" name="post.department.depId" onchange="onChange(this.value)">
+					<option value="">---请选择---</option>
 
+					<s:iterator value="#session.departments" var="d">
+						<option value="${d.depId}">${d.depName}</option>
+					</s:iterator>
+
+				</select>
 			</td>
+
+
 			<td width="8%">职务：</td>
 			<td width="62%">
-				<select id="s2" name="post.postId">
+				<select name="post.postId" id="posts">
+					<option value="">--请选择职务--</option>
 				</select>
 			</td>
+
 		</tr>
 		<tr>
 			<td width="10%">入职时间：</td>
 			<td width="20%">
-				<input type="text" name="onDutyDate" value="" readonly="readonly"
-					   onfocus="c.showMoreDay=true; c.show(this);"/>
+				<input type="text" name="onDutyDate"  readonly="readonly"  onfocus="c.showMoreDay=true; c.show(this);" />
 			</td>
 			<td width="8%"></td>
 			<td width="62%"></td>
@@ -81,35 +90,54 @@
     <s:actionerror/>
 </span>
 <script>
-	$(function () {
-		$.post("${pageContext.request.contextPath}/findDepartment", null,
-				function (data) {
-					var _html = "";
-					_html = '<option value="-1">' + "--请选择--" + '</option>';
-					$("#s2").html(_html);
-					$.each(data, function (index, value) {
-						_html += '<option value="' + value.depId + '">' + value.depName + '</option>'
-					});
-					$("#s1").html(_html);
-				}, "json");
+	function onChange(value) {
+		//输出value的值
+		console.log(value);
+		//根据value的值发送请求,获取二级列表的json数据
+		var data = new FormData();
+		data.append("depId", value);
+		data.append("postId",value);
+		data.append("staffName",value);
 
-		$("#s1").change(function () {
-			$.post("${pageContext.request.contextPath}/findPostByDepId",
-					{
-						depId: $("#s1").val()
-					}
-					,
-					function (data) {
-						var _html = "";
-						_html = '<option value="-1">' + "--请选择--" + '</option>';
-						$.each(data, function (index, value) {
-							_html += '<option value="' + value.postId + '">' + value.postName + '</option>'
-						});
-						$("#s2").html(_html);
-					}, "json");
-		})
-	});
+		var xhr = new XMLHttpRequest();
+		xhr.withCredentials = true;
 
+		xhr.addEventListener("readystatechange", function () {
+			if (this.readyState === 4) {
+				console.log(this.responseText);
+				//对请求回来的数据进行解析
+				json = eval('(' + this.responseText + ')');
+
+				//获取服务器的标签
+				serverSelect = document.getElementById("posts");
+				//获取option标签
+				optionEle = serverSelect.getElementsByTagName("option");
+				//获取option的数量
+				length = optionEle.length;
+				//使用循环清空所有option标签
+				for (var i = 0; i < length - 1; i++) {
+					serverSelect.removeChild(optionEle[1]);
+				}
+				//将json数据插入到option中
+				for (var i = 0; i < json.length; i++) {
+					//创建一个option标签
+					option = document.createElement("option");
+					//设置value属性
+					option.setAttribute("value", json[i].postId);
+					//设置文本信息
+					text = document.createTextNode(json[i].postName)
+					//把文本信息添加到option标签中
+					option.appendChild(text);
+					//把option标签添加到servers标签中
+					serverSelect.appendChild(option);
+				}
+
+			}
+		});
+
+		xhr.open("POST", "findPostByDepId.action");
+		xhr.send(data);
+	}
 </script>
 </body>
 </html>

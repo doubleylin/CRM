@@ -28,13 +28,15 @@ import java.util.List;
 @Controller("staffAction")
 @Scope("prototype")
 public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
-    private Staff staff = new Staff();
+    private Staff staff =new Staff();
+    private Post post = new Post();
     //使用spring属性注解完成service层的装载
     @Resource
     private StaffService staffService;
-    private List<Department> departments = new ArrayList<>();
+    private List<Department> departments;
     private List<Post> posts = new ArrayList<>();
     private String depId;
+    private String postId;
     private String pwd;
     private String repwd;
     private String doubleRePwd;
@@ -45,6 +47,17 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
     @Resource(name = "postService")
     private PostService postService;
 
+    @SkipValidation
+    public String findAll(){
+        if (pageNum == 0){
+            pageNum = 1;
+        }
+        PageBean<Staff> all =
+                staffService.findAll
+                        (getModel(),pageNum,pageSize);
+        ActionContext.getContext().put("pageBean",all);
+        return SUCCESS;
+    }
     /**
      * 查询部门
      * @return
@@ -61,152 +74,75 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
      */
     @SkipValidation
     public String findPostByDepId() {
-        posts = postService.findPostByDepId(this.depId);
+        posts = postService.findPostByDepId(depId);
+        return SUCCESS;
+    }
+    @SkipValidation
+    public String findByStaffId(){
+        List<Staff> byStaffId = staffService.findByStaffId(staff);
+        ActionContext.getContext().getSession().put("byStaffId",byStaffId.get(0));
+        ActionContext.getContext().getSession().put("setPostId",byStaffId.get(0).getPost().getPostId());
+        ActionContext.getContext().getSession().put("setPostName",byStaffId.get(0).getPost().getPostName());
         return SUCCESS;
     }
 
-    /**
-     * 显示职员
-     * 逻辑:
-     * 如果部门,职位,模糊名字都不填:查询全部
-     * 选择部门:查询此部门下所有职位的所有职员
-     * 选择部门+职位:查询这个职位下所有职员
-     * 只填写模糊名字:查询名字包含输入字符串的职员
-     * 填写部门+名字:查询某个部门名字包含输入字符串的职员
-     * 填写全部:查询某个职位名字包含输入字符的职员
-     * @return
-     */
+
     @SkipValidation
-    public String showStaff() {
+    public String highQuery(){
 
-        if ("".equals(staff.getStaffName())) {
-            if ("-1".equals(staff.getDepartment().getDepId())) {
-                List<Staff> staffs = staffService.findAll();
-                ActionContext.getContext().getSession().put("staffs", staffs);
-            } else if ("-1".equals(staff.getPost().getPostId())) {
-                List<Post> posts = postService.findPostByDepId(staff.getDepartment().getDepId());
-
-                List<Staff> staffs = new ArrayList<>();
-                for (Post post : posts) {
-                    List<Staff> staffByPostId = staffService.findStaffByPostId(post.getPostId());
-                    for (Staff staff1 : staffByPostId) {
-                        staffs.add(staff1);
-                    }
-                }
-                ActionContext.getContext().getSession().put("staffs", staffs);
-            } else {
-                List<Staff> staffs = staffService.findStaffByPostId(staff.getPost().getPostId());
-                ActionContext.getContext().getSession().put("staffs", staffs);
-            }
-        } else {
-            if ("-1".equals(staff.getDepartment().getDepId())) {
-                List<Staff> staffs = staffService.findStaffByStaffName(staff.getStaffName());
-                ActionContext.getContext().getSession().put("staffs", staffs);
-            } else if ("-1".equals(staff.getPost().getPostId())) {
-                List<Post> posts = postService.findPostByDepId(staff.getDepartment().getDepId());
-                List<Staff> staffs = new ArrayList<>();
-                for (Post post : posts) {
-                    List<Staff> staffByPostId = staffService.findStaffByPostIdAndStaffName(post.getPostId(), staff.getStaffName());
-                    for (Staff staff1 : staffByPostId) {
-                        staffs.add(staff1);
-                    }
-                }
-                ActionContext.getContext().getSession().put("staffs", staffs);
-            } else {
-                List<Staff> staffs = staffService.findStaffByPostIdAndStaffName(staff.getPost().getPostId(), staff.getStaffName());
-                ActionContext.getContext().getSession().put("staffs", staffs);
-            }
-        }
+        staffs = staffService.highQuery(depId, staff.getPostId(), staff.getStaffName());
         return SUCCESS;
     }
 
-    /**
-     * 添加职员
-     * @return
-     */
     @SkipValidation
-    public String addStaff() {
-
-        if ("".equals(staff.getLoginName())) {
-            addActionError("登录名不能为空");
-            return INPUT;
-        }
-        if ("".equals(staff.getLoginPwd())) {
-            addActionError("密码不能为空");
-            return INPUT;
-        }
-        if ("".equals(staff.getStaffName())) {
-            addActionError("姓名不能为空");
-            return INPUT;
-        }
-        if ("".equals(staff.getGender())) {
-            addActionError("性别不能为空");
-            return INPUT;
-        }
-        if ("-1".equals(staff.getDepartment().getDepId())) {
-            addActionError("请选择部门");
-            return INPUT;
-        }
-        if ("-1".equals(staff.getPost().getPostId())) {
-            addActionError("请选择职务");
-            return INPUT;
-        }
-        if (staff.getOnDutyDate() == null) {
-            addActionError("入职时间不能为空");
-            return INPUT;
-        }
-        Department byId = departmentService.findById(staff.getDepartment().getDepId());
-        staff.setDepartment(byId);
+    public String add(){
         staff.setLoginPwd(CrmStringUtils.getMD5Value(staff.getLoginPwd()));
-        staff.getPost().setDepartment(byId);
-        Post post1 = postService.findPostByPostId(staff.getPost().getPostId());
-        staff.setPost(post1);
         staffService.addStaff(staff);
+        departments = staffService.findDept();
         return SUCCESS;
     }
 
-    /**
-     * 罗列显示职员
-     * @return
-     */
     @SkipValidation
-    public String listStaff() {
-        List<Staff> staffs = staffService.findAll();
-        ActionContext.getContext().getSession().put("staffs", staffs);
-        return SUCCESS;
-    }
-
-    /**
-     * 查找部门和职位
-     * 用于二级联动
-     * @return
-     */
-    @SkipValidation
-    public String findDeptAndPost() {
-        staff = staffService.findByStaffId(staff.getStaffId());
-        List<Department> departments = departmentService.findAllDepartment();
-        ActionContext.getContext().getSession().put("departments", departments);
-
-        List<Post> posts = postService.findPostByDepId(staff.getPost().getDepartment().getDepId());
-        ActionContext.getContext().getSession().put("posts", posts);
-        return SUCCESS;
-    }
-
-    /**
-     * 修改职员
-     * @return
-     */
-    @SkipValidation
-    public String updateStaff() {
-        Department byId = departmentService.findById(staff.getDepartment().getDepId());
-        staff.setDepartment(byId);
+    public String update(){
         staff.setLoginPwd(CrmStringUtils.getMD5Value(staff.getLoginPwd()));
-        staff.getPost().setDepartment(byId);
-        Post post1 = postService.findPostByPostId(staff.getPost().getPostId());
-        staff.setPost(post1);
         staffService.updateStaff(staff);
+        departments = staffService.findDept();
         return SUCCESS;
     }
+
+
+
+    @SkipValidation
+    public String findSome(){
+        pageSize = 20;
+        PageBean<Staff> some = staffService.findSome(getModel(), pageNum, pageSize);
+        ActionContext.getContext().getSession().put("pageBean",some.getData());
+        staffs = some.getData();
+        return SUCCESS;
+    }
+
+    @SkipValidation
+
+    /**
+     * 查询所有部门
+     * @return
+     */
+    public String findDepts(){
+        departments = staffService.findDept();
+        ActionContext.getContext().getSession().put("departments", departments);
+        return SUCCESS;
+    }
+
+
+    @SkipValidation
+    public String ListStaff(){
+
+        staffs = staffService.ListStaff();
+        ActionContext.getContext().getSession().put("staffs",staffs);
+        return SUCCESS;
+    }
+
+
 
     /**
      * 登录判断
@@ -224,12 +160,21 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
         addFieldError("msg","密码错误");
         return ERROR;
     }
+
+    /**
+     * 重登陆
+     * @return
+     */
     @SkipValidation
     public String overLogin(){
-        Staff s = staffService.overLogin(staff);
-        ActionContext.getContext().getSession().remove("staff",s);
+        ActionContext.getContext().getSession().remove("staff");
         return SUCCESS;
     }
+
+    /**
+     * 修改密码
+     * @return
+     */
     @SkipValidation
     public String reLoginPwd(){
         Staff staff1 = (Staff) ActionContext.getContext().getSession().get("staff");
@@ -240,6 +185,15 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
             staffService.reLoginPwd(staff1,CrmStringUtils.getMD5Value(repwd));
             return SUCCESS;
         }
+    }
+
+    /**
+     * 登录拦截
+     * @return
+     */
+    @SkipValidation
+    public String interceptor(){
+        return SUCCESS;
     }
 
     /**
@@ -257,30 +211,8 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
     private List<Staff> staffs;
 
 
-    /**
-     * 获取所有的职员
-     * @return
-     */
-    @SkipValidation
-    public String findAllStaffs(){
-        staffs = staffService.findAll();
-        ActionContext.getContext().getSession().put("staffs", staffs);
-        return SUCCESS;
-    }
 
-    /**
-     * 分页
-     * @return
-     */
-    @SkipValidation
-    public String findStaffsByPage(){
-        if (pageNum==0){
-            pageNum=1;
-        }
-        PageBean<Staff> all = staffService.findStaffByPage(staff,pageNum,pageSize);
-        ActionContext.getContext().getSession().put("pageBean",all);
-        return SUCCESS;
-    }
+
 
     @Override
     public Staff getModel() {
@@ -358,4 +290,29 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff> {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
+
+    public List<Staff> getStaffs() {
+        return staffs;
+    }
+
+    public void setStaffs(List<Staff> staffs) {
+        this.staffs = staffs;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
 }

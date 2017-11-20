@@ -49,6 +49,14 @@ public class PageBean<T> {
         this.startIndex = startIndex;
     }
 
+    public PageBean(int pageNum, int pageSize, int totalRecord, int startIndex, int totalPage) {
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        this.totalRecord = totalRecord;
+        this.startIndex = startIndex;
+        this.totalPage = totalPage;
+    }
+
     public PageBean(int pageNum, int pageSize, int totalRecord) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;

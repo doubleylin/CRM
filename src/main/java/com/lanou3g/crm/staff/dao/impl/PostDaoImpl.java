@@ -1,6 +1,6 @@
 package com.lanou3g.crm.staff.dao.impl;
 
-import com.lanou3g.crm.base.impl.BaseAction;
+import com.lanou3g.crm.base.impl.BaseDaoImpl;
 import com.lanou3g.crm.staff.dao.PostDao;
 import com.lanou3g.crm.staff.domain.Department;
 import com.lanou3g.crm.staff.domain.Post;
@@ -31,7 +31,7 @@ import java.util.Map;
  * .                       '.:::::'                    ':'````..
  */
 
-public class PostDaoImpl extends BaseAction<Post> implements PostDao {
+public class PostDaoImpl extends BaseDaoImpl<Post> implements PostDao {
     /**
      * 查询所有的部门
      * @return
@@ -40,6 +40,11 @@ public class PostDaoImpl extends BaseAction<Post> implements PostDao {
     public List<Post> findAllPost() {
         String sql = "from Post";
         return findAll(sql);
+    }
+
+    @Override
+    public List<Department> findDept() {
+        return (List<Department>) getHibernateTemplate().find("from Department ");
     }
 
     /**

@@ -40,8 +40,8 @@
 <form action="addDepartment.action" method="post">
     <table width="88%" border="0" class="emp_table" style="width:80%;">
         <tr>
-            <td>部门名称：</td><input type="hidden" name="depId" value="${param.depId}">
-            <td><input type="text" name="depName" value="${param.depName}"/></td>
+            <td>部门名称：<s:textfield name="depName" value="%{#byId.depName}"/></td>
+            <td><s:hidden name="depId" value="%{#byId.depId}"/></td>
         </tr>
     </table>
 </form>
